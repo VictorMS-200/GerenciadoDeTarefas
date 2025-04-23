@@ -72,7 +72,7 @@ adicionarTarefaMain tarefas = do
         -- Verifica se a data de prazo é válida, caso contrário, define como Nothing
         let prazo = if null prazoIO then Nothing
             else case parseTimeM True defaultTimeLocale "%Y-%m-%d" prazoIO of
-                Just day -> Just day
+                Just dia -> Just dia
                 Nothing  -> error "Data inválida. Use o formato YYYY-MM-DD."
         
         -- Solicita as tags ao usuário
@@ -82,16 +82,18 @@ adicionarTarefaMain tarefas = do
         -- Substitui os caracteres '&' por espaços para separar as tags.
         let tags = words (map (\c -> if c == '&' then ' ' else c) tagsIO)
 
-        -- Gera um identificador único para a nova tarefa com base no maior identificador existente na lista de tarefas ou 1 se a lista estiver vazia.
-        idTarefa <- if null tarefas then return 1
-            else return (foldl (\x y -> if x > y then x else y) 0 [idTarefa t | t <- tarefas] + 1)
+        putStrLn "Por ultimo, digite o ID da tarefa:"
+        idStr <- getLine
+        let idTarefa = read idStr :: Int
+        let tarefaUsuario = Tarefa { idTarefa = idTarefa, descricao = descricao, status = Pendente, prioridade = prioridade, categoria = categoria, prazo = prazo, tags = tags }
 
-        -- Cria a nova tarefa com os dados fornecidos pelo usuário e o identificador gerado.
-        let novaTarefa = Tarefa { idTarefa = idTarefa, descricao = descricao, status = Pendente, prioridade = prioridade, categoria = categoria, prazo = prazo, tags = tags }
-        
-        let tarefasAtualizadas = adicionarTarefa novaTarefa tarefas
-        putStrLn "Tarefa adicionada com sucesso!"
-        return tarefasAtualizadas
+        case validarIdentificador idTarefa tarefas tarefaUsuario of
+            Just tarefas -> do
+                putStrLn "Tarefa adicionada com sucesso!"
+                return tarefas
+            Nothing -> do
+                putStrLn "ID já existe! Tente novamente."
+                adicionarTarefaMain tarefas -- Chama a função novamente para solicitar um ID válido
 
 removerTarefaMain :: [Tarefa] -> IO [Tarefa] -- Recebe uma lista de tarefas e retorna a lista atualizada com a tarefa removida do identificador fornecido
 removerTarefaMain tarefas = do

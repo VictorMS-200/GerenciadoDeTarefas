@@ -1,4 +1,4 @@
-module Funcoes(adicionarTarefa, removerTarefa, marcarConcluída, listarPorCategoria, mostrarTarefas, listarPorPrioridade, ordenarPorPrioridade, filtrarPorStatus, buscarPorPalavraChave, verificarAtrasos) where
+module Funcoes(adicionarTarefa, removerTarefa, marcarConcluída, listarPorCategoria, mostrarTarefas, listarPorPrioridade, ordenarPorPrioridade, filtrarPorStatus, buscarPorPalavraChave, verificarAtrasos, validarIdentificador) where
 import Tipos
 import Data.List (sortBy)
 import Data.Ord (comparing)
@@ -6,11 +6,19 @@ import Data.List (isInfixOf)
 import Data.Time.Calendar (diffDays, Day)
 
 
-mostrarTarefas :: [Tarefa] -> IO () -- Função para mostrar as tarefas na tela
+-- Função que transforma todas tarefas de uma lista em uma saida formatada
+-- Exibe o ID, descrição, status, prioridade, categoria, prazo e tags de cada tarefa
+mostrarTarefas :: [Tarefa] -> IO ()
 mostrarTarefas [] = return ()
 mostrarTarefas (t:ts) = do
     putStrLn $ "ID: " ++ show (idTarefa t) ++ ", Descrição: " ++ descricao t ++ ", Status: " ++ show (status t) ++ ", Prioridade: " ++ show (prioridade t) ++ ", Categoria: " ++ show (categoria t) ++ ", Prazo: " ++ show (prazo t) ++ ", Tags: " ++ show (tags t)
     mostrarTarefas ts
+
+validarIdentificador :: Int -> [Tarefa] -> Tarefa -> Maybe [Tarefa]
+validarIdentificador identificador listaDeTarefas novaTarefa
+    | null listaDeTarefas = Nothing
+    | elem identificador (map idTarefa listaDeTarefas) = Nothing
+    | otherwise = Just (novaTarefa : listaDeTarefas)
 
 -- Adiciona nova tarefa na lista que contem o restante da lista
 adicionarTarefa :: Tarefa -> [Tarefa] -> [Tarefa]
@@ -33,16 +41,16 @@ marcarConcluída identificador listaDeTarefas
     | otherwise = Just [if idTarefa t == identificador then t {status = Concluída} else t | t <- listaDeTarefas]
 
 listarPorCategoria :: Categoria -> [Tarefa] -> [Tarefa]
-listarPorCategoria cat listaDeTarefas = [t | t <- listaDeTarefas, categoria t == cat]
+listarPorCategoria categoriaProcurado listaDeTarefas = [t | t <- listaDeTarefas, categoria t == categoriaProcurado]
 
 listarPorPrioridade :: Prioridade -> [Tarefa] -> [Tarefa]
-listarPorPrioridade pri listaDeTarefas = [t | t <- listaDeTarefas, prioridade t == pri]
+listarPorPrioridade prioridadeProcurado listaDeTarefas = [t | t <- listaDeTarefas, prioridade t == prioridadeProcurado]
 
 ordenarPorPrioridade :: [Tarefa] -> [Tarefa]
 ordenarPorPrioridade listaDeTarefas = sortBy (comparing prioridade) listaDeTarefas
 
 filtrarPorStatus :: Status -> [Tarefa] -> [Tarefa]
-filtrarPorStatus sta listaDeTarefas = [t | t <- listaDeTarefas, status t == sta]
+filtrarPorStatus statusProcurado listaDeTarefas = [t | t <- listaDeTarefas, status t == statusProcurado]
 
 buscarPorPalavraChave :: String -> [Tarefa] -> [Tarefa]
 buscarPorPalavraChave palavra listaDeTarefas = [t | t <- listaDeTarefas, isInfixOf palavra (descricao t)]
@@ -51,3 +59,8 @@ verificarAtrasos :: [Tarefa] -> Day -> [Tarefa]
 verificarAtrasos listaDeTarefas dia = [t | t <- listaDeTarefas, case prazo t of
     Just prazo -> diffDays dia prazo > 0
     Nothing -> False]
+
+calcularDiasRestantes :: Tarefa -> Day -> Maybe Int
+calcularDiasRestantes tarefa dia = case prazo tarefa of
+    Just prazo -> Just (fromIntegral (diffDays prazo dia))
+    Nothing -> Nothing

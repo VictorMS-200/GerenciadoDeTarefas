@@ -39,22 +39,6 @@ Depois de compilar, você pode executar o programa com o seguinte comando:
 
 #### Obs: o nome {gerenciadorDeTarefas} pode ser qualquer nome que você preferir, desde que não tenha espaços ou caracteres especiais.
 
-# Estrutura do projeto
-
-O projeto é dividido em módulos, cada um responsável por uma parte específica do sistema. A estrutura do projeto é a seguinte:
-
-```
-GerenciadoDeTarefas
-├── src
-│   ├── Funcoes.hs
-│   ├── Main.hs
-│   ├── Persistencia.hs
-│   └── Tipos.hs
-├── README.md
-├── LICENSE
-└── .gitignore
-```
-
 ## Tipos de dados
 
 ### Tarefa
