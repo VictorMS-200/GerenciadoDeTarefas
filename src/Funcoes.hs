@@ -1,4 +1,4 @@
-module Funcoes(adicionarTarefa, removerTarefa, marcarConcluída, listarPorCategoria, mostrarTarefas, listarPorPrioridade, ordenarPorPrioridade) where
+module Funcoes(adicionarTarefa, removerTarefa, marcarConcluída, listarPorCategoria, mostrarTarefas, listarPorPrioridade, ordenarPorPrioridade, filtrarPorStatus) where
 import Tipos
 import Data.List (sortBy)
 import Data.Ord (comparing)
@@ -37,3 +37,6 @@ listarPorPrioridade pri listaDeTarefas = [t | t <- listaDeTarefas, prioridade t 
 
 ordenarPorPrioridade :: [Tarefa] -> [Tarefa]
 ordenarPorPrioridade listaDeTarefas = sortBy (comparing prioridade) listaDeTarefas
+
+filtrarPorStatus :: Status -> [Tarefa] -> [Tarefa]
+filtrarPorStatus sta listaDeTarefas = [t | t <- listaDeTarefas, status t == sta]

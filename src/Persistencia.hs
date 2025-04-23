@@ -1,4 +1,4 @@
-module Persistencia(listaMenu, adicionarTarefaMain, removerTarefaMain, marcarConcluídaMain, listarPorCategoriaMain, listarPorPrioridadeMain, ordenarPorPrioridadeMain) where
+module Persistencia(listaMenu, adicionarTarefaMain, removerTarefaMain, marcarConcluídaMain, listarPorCategoriaMain, listarPorPrioridadeMain, ordenarPorPrioridadeMain, filtrarPorStatusMain) where
 import Funcoes
 import Tipos
 import System.IO
@@ -165,10 +165,25 @@ listarPorPrioridadeMain tarefas = do
                 putStrLn "Tarefas listadas por prioridade:"
                 mostrarTarefas (listarPorPrioridade prioridade tarefas)
 
-
 ordenarPorPrioridadeMain :: [Tarefa] -> IO ()
 ordenarPorPrioridadeMain tarefas
     | null tarefas = do putStrLn "Nenhuma tarefa para ser ordenada!"
     | otherwise = do
         putStrLn "Tarefas oordenadas por prioridade"
         mostrarTarefas (ordenarPorPrioridade tarefas)
+
+filtrarPorStatusMain :: [Tarefa] -> IO()
+filtrarPorStatusMain tarefas = do
+    putStrLn "Digite o status (Pendente, Concluída):"
+    statusIO <- getLine
+
+    if notElem statusIO ["Pendente", "Concluída"] then do 
+        putStrLn $ "Erro! Palavra " ++ statusIO ++ " não corresponde aos status ['Pendente', 'Concluída']."
+        filtrarPorStatusMain tarefas
+    else do
+        status <- case statusIO of
+            "Pendente" -> return Pendente
+            "Concluída" -> return Concluída
+
+        mostrarTarefas (filtrarPorStatus status tarefas)
+    
