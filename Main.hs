@@ -33,7 +33,7 @@ loop tarefas = do
             loop tarefasAtualizadas
         "4" -> do
             listarPorCategoriaMain tarefas
-            loop Tarefas
+            loop tarefas
         "15" -> putStrLn "Saindo do programa..."
         _ -> do
             putStrLn "Opção inválida!"
