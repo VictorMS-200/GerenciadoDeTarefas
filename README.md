@@ -17,9 +17,9 @@ Esse é um sistema de gerenciamento de tarefas feito usando a linguagem Haskell.
 
 
 # Como usar
-Para compilar e executar o projeto, primeiro, você precisa ter o GHC (Glasgow Haskell Compiler) instalado. Você pode baixar o GHC [aqui](https://www.haskell.org/downloads/).
+Para compilar e executar o projeto, primeiro, você precisa ter o [GHC (Glasgow Haskell Compiler)](https://www.haskell.org/downloads/) instalado.
 
-Depois de instalar o GHC, você vai para o diretório do projeto:
+Após instalar o GHC, você pode clonar o repositório do projeto e navegar até o diretório `src`:
 
 ```bash
 cd src
@@ -36,6 +36,9 @@ Depois de compilar, você pode executar o programa com o seguinte comando:
 ```bash
 .\gerenciadorDeTarefas
 ```
+
+#### Obs: o nome {gerenciadorDeTarefas} pode ser qualquer nome que você preferir, desde que não tenha espaços ou caracteres especiais.
+
 # Estrutura do projeto
 
 O projeto é dividido em módulos, cada um responsável por uma parte específica do sistema. A estrutura do projeto é a seguinte:

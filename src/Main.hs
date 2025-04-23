@@ -34,6 +34,9 @@ loop tarefas = do
         "4" -> do
             listarPorCategoriaMain tarefas
             loop tarefas
+        "6" -> do
+            ordenarPorPrioridadeMain tarefas
+            loop tarefas 
         "15" -> putStrLn "Saindo do programa..."
         _ -> do
             putStrLn "Opção inválida!"

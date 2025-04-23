@@ -1,4 +1,4 @@
-module Persistencia(listaMenu, adicionarTarefaMain, removerTarefaMain, marcarConcluídaMain, listarPorCategoriaMain) where
+module Persistencia(listaMenu, adicionarTarefaMain, removerTarefaMain, marcarConcluídaMain, listarPorCategoriaMain, ordenarPorPrioridadeMain) where
 import Funcoes
 import Tipos
 import System.IO
@@ -143,8 +143,18 @@ listarPorCategoriaMain tarefas = do
     case listarPorCategoria categoria tarefas of
         Just tarefasFiltradas -> do
             putStrLn "Tarefas filtradas por categoria:"
-            
+            mostrarTarefas tarefasFiltradas
             return tarefasFiltradas
         Nothing -> do
             putStrLn "Nenhuma tarefa encontrada ou lista vazia."
             return []
+
+
+
+ordenarPorPrioridadeMain :: [Tarefa] -> IO [Tarefa]
+ordenarPorPrioridadeMain tarefas
+    | null tarefas = do return []
+    | otherwise = do
+        putStrLn "Tarefas oordenadas por prioridade"
+        mostrarTarefas (ordenarPorPrioridade tarefas)
+        return []

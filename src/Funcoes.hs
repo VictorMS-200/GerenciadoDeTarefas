@@ -1,5 +1,13 @@
-module Funcoes(adicionarTarefa, removerTarefa, marcarConcluída, listarPorCategoria) where
+module Funcoes(adicionarTarefa, removerTarefa, marcarConcluída, listarPorCategoria, mostrarTarefas, ordenarPorPrioridade) where
 import Tipos
+import Data.List (sortBy)
+import Data.Ord (comparing)
+
+mostrarTarefas :: [Tarefa] -> IO () -- Função para mostrar as tarefas na tela
+mostrarTarefas [] = return ()
+mostrarTarefas (t:ts) = do
+    putStrLn $ "ID: " ++ show (idTarefa t) ++ ", Descrição: " ++ descricao t ++ ", Status: " ++ show (status t) ++ ", Prioridade: " ++ show (prioridade t) ++ ", Categoria: " ++ show (categoria t) ++ ", Prazo: " ++ show (prazo t) ++ ", Tags: " ++ show (tags t)
+    mostrarTarefas ts
 
 -- Adiciona nova tarefa na lista que contem o restante da lista
 adicionarTarefa :: Tarefa -> [Tarefa] -> [Tarefa]
@@ -25,3 +33,11 @@ listarPorCategoria :: Categoria -> [Tarefa] -> Maybe [Tarefa]
 listarPorCategoria cat listaDeTarefas 
     | null listaDeTarefas = Nothing
     | otherwise = Just [t | t <- listaDeTarefas, categoria t == cat]
+
+listarPorPrioridade :: Prioridade -> [Tarefa] -> Maybe [Tarefa]
+listarPorPrioridade pri listaDeTarefas
+    | null listaDeTarefas = Nothing
+    | otherwise = Just [t | t <- listaDeTarefas, prioridade t == pri]
+
+ordenarPorPrioridade :: [Tarefa] -> [Tarefa]
+ordenarPorPrioridade listaDeTarefas = sortBy (comparing prioridade) listaDeTarefas

@@ -1,6 +1,5 @@
 module Tipos(Status(..), Prioridade(..), Categoria(..), Tarefa(..)) where
 
-
 import Data.Time.Calendar 
 
 data Status = Pendente | Concluída deriving (Show, Eq)
