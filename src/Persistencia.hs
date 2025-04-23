@@ -1,4 +1,4 @@
-module Persistencia(listaMenu, adicionarTarefaMain, removerTarefaMain, marcarConcluídaMain, listarPorCategoriaMain, listarPorPrioridadeMain, ordenarPorPrioridadeMain, filtrarPorStatusMain) where
+module Persistencia(listaMenu, adicionarTarefaMain, removerTarefaMain, marcarConcluídaMain, listarPorCategoriaMain, listarPorPrioridadeMain, ordenarPorPrioridadeMain, filtrarPorStatusMain, buscarPorPalavraChaveMain) where
 import Funcoes
 import Tipos
 import System.IO
@@ -187,3 +187,14 @@ filtrarPorStatusMain tarefas = do
 
         mostrarTarefas (filtrarPorStatus status tarefas)
     
+buscarPorPalavraChaveMain :: [Tarefa] -> IO()
+buscarPorPalavraChaveMain tarefas = do 
+    putStrLn "Digite a palavra chave a ser procurada:"
+    palavraChaveIO <- getLine
+    if null palavraChaveIO then do 
+        putStrLn $ "Erro! Palavra invalida, tente novamente."
+        buscarPorPalavraChaveMain tarefas
+    else do
+        if null (buscarPorPalavraChave palavraChaveIO tarefas) then do putStrLn $ "Nenhuma tarefa com a palavra chave " ++ palavraChaveIO ++ " na descrição"
+        else do
+            mostrarTarefas (buscarPorPalavraChave palavraChaveIO tarefas)

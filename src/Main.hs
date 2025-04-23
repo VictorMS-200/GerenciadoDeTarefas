@@ -43,9 +43,10 @@ loop tarefas = do
         "7" -> do
             filtrarPorStatusMain tarefas
             loop tarefas
+        "8" -> do
+            buscarPorPalavraChaveMain tarefas
+            loop tarefas
         "15" -> putStrLn "Saindo do programa..."
         _ -> do
             putStrLn "Opção inválida!"
             loop tarefas
-
-    

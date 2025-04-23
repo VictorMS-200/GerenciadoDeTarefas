@@ -1,7 +1,9 @@
-module Funcoes(adicionarTarefa, removerTarefa, marcarConcluída, listarPorCategoria, mostrarTarefas, listarPorPrioridade, ordenarPorPrioridade, filtrarPorStatus) where
+module Funcoes(adicionarTarefa, removerTarefa, marcarConcluída, listarPorCategoria, mostrarTarefas, listarPorPrioridade, ordenarPorPrioridade, filtrarPorStatus, buscarPorPalavraChave) where
 import Tipos
 import Data.List (sortBy)
 import Data.Ord (comparing)
+import Data.List (isInfixOf)
+
 
 mostrarTarefas :: [Tarefa] -> IO () -- Função para mostrar as tarefas na tela
 mostrarTarefas [] = return ()
@@ -40,3 +42,6 @@ ordenarPorPrioridade listaDeTarefas = sortBy (comparing prioridade) listaDeTaref
 
 filtrarPorStatus :: Status -> [Tarefa] -> [Tarefa]
 filtrarPorStatus sta listaDeTarefas = [t | t <- listaDeTarefas, status t == sta]
+
+buscarPorPalavraChave :: String -> [Tarefa] -> [Tarefa]
+buscarPorPalavraChave palavra listaDeTarefas = [t | t <- listaDeTarefas, isInfixOf palavra (descricao t)]
