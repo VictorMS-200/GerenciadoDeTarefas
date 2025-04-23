@@ -1,5 +1,57 @@
 # Sistema de gerenciamento de tarefas
 
+Esse é um sistema de gerenciamento de tarefas feito usando a linguagem Haskell. O sistema permite adicionar, remover e listar tarefas, além de filtrar por prioridade, status e categoria.
+
+# Sumário
+- [Como usar](#como-usar)
+- [Estrutura do projeto](#estrutura-do-projeto)
+- [Tipos de dados](#tipos-de-dados)
+    - [Tarefa](#tarefa)
+    - [Prioridade](#prioridade)
+    - [Status](#status)
+    - [Categoria](#categoria)
+- [Funções principais](#funções-principais)
+  - [adicionarTarefa](#adicionartarefa)
+- [Funções de manipulação de tarefas](#funções-de-manipulação-de-tarefas)
+  - [adicionarTarefaMain](#adicionartarefamain)
+
+
+# Como usar
+Para compilar e executar o projeto, primeiro, você precisa ter o GHC (Glasgow Haskell Compiler) instalado. Você pode baixar o GHC [aqui](https://www.haskell.org/downloads/).
+
+Depois de instalar o GHC, você vai para o diretório do projeto:
+
+```bash
+cd src
+```
+
+E então, você pode compilar o projeto com o seguinte comando:
+
+```bash
+ghc -o gerenciadorDeTarefas .\Main.hs 
+```
+
+Depois de compilar, você pode executar o programa com o seguinte comando:
+
+```bash
+.\gerenciadorDeTarefas
+```
+# Estrutura do projeto
+
+O projeto é dividido em módulos, cada um responsável por uma parte específica do sistema. A estrutura do projeto é a seguinte:
+
+```
+GerenciadoDeTarefas
+├── src
+│   ├── Funcoes.hs
+│   ├── Main.hs
+│   ├── Persistencia.hs
+│   └── Tipos.hs
+├── README.md
+├── LICENSE
+└── .gitignore
+```
+
 ## Tipos de dados
 
 ### Tarefa
