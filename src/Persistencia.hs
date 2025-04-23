@@ -5,6 +5,7 @@ import System.IO
 import Data.Time.Calendar (Day, fromGregorian, diffDays)
 import Data.Time.LocalTime
 import Data.Time.Format (parseTimeM, defaultTimeLocale)
+import Text.Read (readMaybe)
 
 
 -- função para mostrar o menu de opcoes
@@ -74,7 +75,7 @@ adicionarTarefaMain tarefas = do
             else case parseTimeM True defaultTimeLocale "%Y-%m-%d" prazoIO of
                 Just dia -> Just dia
                 Nothing  -> error "Data inválida. Use o formato YYYY-MM-DD."
-        
+
         -- Solicita as tags ao usuário
         putStrLn "Digite as tags (separadas por &):"
         tagsIO <- getLine
@@ -84,22 +85,27 @@ adicionarTarefaMain tarefas = do
 
         putStrLn "Por ultimo, digite o ID da tarefa:"
         idStr <- getLine
-        let idTarefa = read idStr :: Int
-        let tarefaUsuario = Tarefa { idTarefa = idTarefa, descricao = descricao, status = Pendente, prioridade = prioridade, categoria = categoria, prazo = prazo, tags = tags }
 
-        case validarIdentificador idTarefa tarefas tarefaUsuario of
-            Just tarefas -> do
-                putStrLn "Tarefa adicionada com sucesso!"
-                return tarefas
+        case readMaybe idStr :: Maybe Int of
             Nothing -> do
-                putStrLn "ID já existe! Tente novamente."
-                adicionarTarefaMain tarefas -- Chama a função novamente para solicitar um ID válido
+                putStrLn "Erro: Entrada inválida. Certifique-se de digitar um número inteiro."
+                adicionarTarefaMain tarefas 
+            Just idTarefa -> do
+                let tarefaUsuario = Tarefa { idTarefa = idTarefa, descricao = descricao, status = Pendente, prioridade = prioridade, categoria = categoria, prazo = prazo, tags = tags }
+                case validarIdentificador idTarefa tarefas tarefaUsuario of
+                    Just tarefas -> do
+                        putStrLn "Tarefa adicionada com sucesso!"
+                        return tarefas
+                    Nothing -> do
+                        putStrLn "ID já existe! Tente novamente."
+                        adicionarTarefaMain tarefas 
 
 removerTarefaMain :: [Tarefa] -> IO [Tarefa] -- Recebe uma lista de tarefas e retorna a lista atualizada com a tarefa removida do identificador fornecido
 removerTarefaMain tarefas = do
     -- Solicita o ID da tarefa a ser removida ao usuário
     putStrLn "Digite o ID da tarefa a ser removida:"
     idStr <- getLine
+    -- Verifica se o ID é um número inteiro
     let idTarefa = read idStr :: Int
     case removerTarefa idTarefa tarefas of
         Just tarefasAtualizadas -> do
@@ -204,6 +210,9 @@ buscarPorPalavraChaveMain tarefas = do
 
 verificarAtrasosMain :: [Tarefa] -> IO()
 verificarAtrasosMain tarefas = do
+    putStrLn "Tarefas com prazo atrasado:"
     localTime <- getZonedTime
     let day = localDay (zonedTimeToLocalTime localTime)
     mostrarTarefas (verificarAtrasos tarefas day)
+
+

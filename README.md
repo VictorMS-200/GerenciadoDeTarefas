@@ -104,8 +104,8 @@ adicionarTarefaMain :: [Tarefa] -> IO [Tarefa]
 Adiciona uma tarefa criada a partir dos dados de entrada do usuário e adiciona esta na lista de tarefas informada no parâmetro. A tarefa é composta por descrição, prioridade, status, categoria, prazo, tags e identificador.
 
 ### Observação:
-- O prazo deve ser uma data válida no formato "YYYY-MM-DD".
-- O identificador é criado automaticamente e sua lógica é gerada pelo sistema. Na prática, o identificador é o maior identificador já existente na lista de tarefas + 1, ou se não houver tarefa na lista passada no parâmetro, o identificador será 1.
+- O prazo deve ser uma data válida no formato "YYYY-MM-DD". Caso contrário, o sistema irá retornar um erro e irá usar o valor Nothing para o prazo.
+- O identificador não pode ser duplicado. Caso o usuário informe um identificador já existente, o sistema irá retornar um erro e o usuário deverá informar um novo identificador.
 - O status da tarefa é sempre "Pendente" quando a tarefa é criada.
 - Na hora da criação, existe um padrão para alguns campos, como:
     * A prioridade é sempre "Baixa" quando o usuário não informa ou informa um valor inválido.
