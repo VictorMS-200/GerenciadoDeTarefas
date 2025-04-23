@@ -1,8 +1,9 @@
-module Funcoes(adicionarTarefa, removerTarefa, marcarConcluída, listarPorCategoria, mostrarTarefas, listarPorPrioridade, ordenarPorPrioridade, filtrarPorStatus, buscarPorPalavraChave) where
+module Funcoes(adicionarTarefa, removerTarefa, marcarConcluída, listarPorCategoria, mostrarTarefas, listarPorPrioridade, ordenarPorPrioridade, filtrarPorStatus, buscarPorPalavraChave, verificarAtrasos) where
 import Tipos
 import Data.List (sortBy)
 import Data.Ord (comparing)
 import Data.List (isInfixOf)
+import Data.Time.Calendar (diffDays, Day)
 
 
 mostrarTarefas :: [Tarefa] -> IO () -- Função para mostrar as tarefas na tela
@@ -45,3 +46,8 @@ filtrarPorStatus sta listaDeTarefas = [t | t <- listaDeTarefas, status t == sta]
 
 buscarPorPalavraChave :: String -> [Tarefa] -> [Tarefa]
 buscarPorPalavraChave palavra listaDeTarefas = [t | t <- listaDeTarefas, isInfixOf palavra (descricao t)]
+
+verificarAtrasos :: [Tarefa] -> Day -> [Tarefa]
+verificarAtrasos listaDeTarefas dia = [t | t <- listaDeTarefas, case prazo t of
+    Just prazo -> diffDays dia prazo > 0
+    Nothing -> False]

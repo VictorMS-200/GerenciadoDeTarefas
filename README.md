@@ -126,3 +126,10 @@ Adiciona uma tarefa criada a partir dos dados de entrada do usuário e adiciona 
 - Na hora da criação, existe um padrão para alguns campos, como:
     * A prioridade é sempre "Baixa" quando o usuário não informa ou informa um valor inválido.
     * A categoria é sempre "Pessoal" quando o usuário não informa ou informa um valor inválido.
+
+
+## Referências
+- [Haskell Wiki](https://wiki.haskell.org/Haskell)
+- [Data Time Calendar](https://hackage.haskell.org/package/time-1.14/docs/Data-Time-Calendar.html)
+- [Data Time LocalTime](https://hackage.haskell.org/package/time-1.14/docs/Data-Time-LocalTime.html)
+- [GHC](https://www.haskell.org/ghc/)

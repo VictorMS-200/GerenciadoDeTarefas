@@ -1,6 +1,7 @@
 module Main(main) where
 
 import Data.Time.Calendar (Day, fromGregorian)
+
 import System.IO
 import Funcoes
 import Persistencia
@@ -45,6 +46,9 @@ loop tarefas = do
             loop tarefas
         "8" -> do
             buscarPorPalavraChaveMain tarefas
+            loop tarefas
+        "9" -> do
+            verificarAtrasosMain tarefas
             loop tarefas
         "15" -> putStrLn "Saindo do programa..."
         _ -> do

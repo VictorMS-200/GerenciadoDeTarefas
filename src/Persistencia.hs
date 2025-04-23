@@ -1,8 +1,9 @@
-module Persistencia(listaMenu, adicionarTarefaMain, removerTarefaMain, marcarConcluídaMain, listarPorCategoriaMain, listarPorPrioridadeMain, ordenarPorPrioridadeMain, filtrarPorStatusMain, buscarPorPalavraChaveMain) where
+module Persistencia(listaMenu, adicionarTarefaMain, removerTarefaMain, marcarConcluídaMain, listarPorCategoriaMain, listarPorPrioridadeMain, ordenarPorPrioridadeMain, filtrarPorStatusMain, buscarPorPalavraChaveMain, verificarAtrasosMain) where
 import Funcoes
 import Tipos
 import System.IO
-import Data.Time.Calendar (fromGregorian, Day)
+import Data.Time.Calendar (Day, fromGregorian, diffDays)
+import Data.Time.LocalTime
 import Data.Time.Format (parseTimeM, defaultTimeLocale)
 
 
@@ -116,9 +117,9 @@ marcarConcluídaMain tarefas = do
     -- Chama a função marcarConcluída para atualizar o status da tarefa
     -- Se a tarefa for encontrada, atualiza o status para Concluída e retorna a lista atualizada
     case marcarConcluída idTarefa tarefas of
-        Just tarefasAtualizadas -> do
+        Just tarefasConcluidas -> do
             putStrLn "Tarefa marcada como concluída com sucesso!"
-            return tarefasAtualizadas
+            return tarefasConcluidas
         Nothing -> do
             putStrLn "Tarefa não encontrada ou lista vazia."
             return tarefas
@@ -198,3 +199,9 @@ buscarPorPalavraChaveMain tarefas = do
         if null (buscarPorPalavraChave palavraChaveIO tarefas) then do putStrLn $ "Nenhuma tarefa com a palavra chave " ++ palavraChaveIO ++ " na descrição"
         else do
             mostrarTarefas (buscarPorPalavraChave palavraChaveIO tarefas)
+
+verificarAtrasosMain :: [Tarefa] -> IO()
+verificarAtrasosMain tarefas = do
+    localTime <- getZonedTime
+    let day = localDay (zonedTimeToLocalTime localTime)
+    mostrarTarefas (verificarAtrasos tarefas day)
