@@ -1,4 +1,4 @@
-module Funcoes(adicionarTarefa, removerTarefa, marcarConcluída, listarPorCategoria, mostrarTarefas, ordenarPorPrioridade) where
+module Funcoes(adicionarTarefa, removerTarefa, marcarConcluída, listarPorCategoria, mostrarTarefas, listarPorPrioridade, ordenarPorPrioridade) where
 import Tipos
 import Data.List (sortBy)
 import Data.Ord (comparing)
@@ -29,15 +29,11 @@ marcarConcluída identificador listaDeTarefas
     | notElem identificador (map idTarefa listaDeTarefas) = Nothing 
     | otherwise = Just [if idTarefa t == identificador then t {status = Concluída} else t | t <- listaDeTarefas]
 
-listarPorCategoria :: Categoria -> [Tarefa] -> Maybe [Tarefa]
-listarPorCategoria cat listaDeTarefas 
-    | null listaDeTarefas = Nothing
-    | otherwise = Just [t | t <- listaDeTarefas, categoria t == cat]
+listarPorCategoria :: Categoria -> [Tarefa] -> [Tarefa]
+listarPorCategoria cat listaDeTarefas = [t | t <- listaDeTarefas, categoria t == cat]
 
-listarPorPrioridade :: Prioridade -> [Tarefa] -> Maybe [Tarefa]
-listarPorPrioridade pri listaDeTarefas
-    | null listaDeTarefas = Nothing
-    | otherwise = Just [t | t <- listaDeTarefas, prioridade t == pri]
+listarPorPrioridade :: Prioridade -> [Tarefa] -> [Tarefa]
+listarPorPrioridade pri listaDeTarefas = [t | t <- listaDeTarefas, prioridade t == pri]
 
 ordenarPorPrioridade :: [Tarefa] -> [Tarefa]
 ordenarPorPrioridade listaDeTarefas = sortBy (comparing prioridade) listaDeTarefas

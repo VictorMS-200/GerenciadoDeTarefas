@@ -34,6 +34,9 @@ loop tarefas = do
         "4" -> do
             listarPorCategoriaMain tarefas
             loop tarefas
+        "5" -> do
+            listarPorPrioridadeMain tarefas
+            loop tarefas
         "6" -> do
             ordenarPorPrioridadeMain tarefas
             loop tarefas 

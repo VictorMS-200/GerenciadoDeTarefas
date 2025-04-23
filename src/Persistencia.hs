@@ -1,4 +1,4 @@
-module Persistencia(listaMenu, adicionarTarefaMain, removerTarefaMain, marcarConcluídaMain, listarPorCategoriaMain, ordenarPorPrioridadeMain) where
+module Persistencia(listaMenu, adicionarTarefaMain, removerTarefaMain, marcarConcluídaMain, listarPorCategoriaMain, listarPorPrioridadeMain, ordenarPorPrioridadeMain) where
 import Funcoes
 import Tipos
 import System.IO
@@ -123,38 +123,52 @@ marcarConcluídaMain tarefas = do
             putStrLn "Tarefa não encontrada ou lista vazia."
             return tarefas
 
-listarPorCategoriaMain :: [Tarefa] -> IO [Tarefa] -- Recebe uma lista de tarefas e retorna a lista filtrada por categoria
+listarPorCategoriaMain :: [Tarefa] -> IO () -- Recebe uma lista de tarefas e retorna a lista filtrada por categoria
 listarPorCategoriaMain tarefas = do
     -- Solicita a categoria ao usuário
     putStrLn "Digite a categoria (Trabalho, Estudos, Pessoal, Outro):"
     categoriaIO <- getLine
     
-    -- Verifica se a categoria é válida, caso contrário, define como Pessoal
-    categoria <- case categoriaIO of
-        "Trabalho" -> return Trabalho
-        "Estudos" -> return Estudos
-        "Pessoal" -> return Pessoal
-        "Outro" -> return Outro
-        _ -> do
-            putStrLn "Categoria inválida! Usando categoria padrão Pessoal."
-            return Pessoal
+    -- Verifica se a categoria é válida, caso contrário, chama a função novamente
+    if notElem categoriaIO ["Trabalho", "Estudos", "Pessoal", "Outro"] then do
+        putStrLn $ "Erro! Palavra " ++ categoriaIO ++ " não corresponde a lista de categoria ['Trabalho', 'Estudos', 'Pessoal', 'Outro']."
+        listarPorCategoriaMain tarefas
+    else do
+        categoria <- case categoriaIO of
+            "Trabalho" -> return Trabalho
+            "Estudos" -> return Estudos
+            "Pessoal" -> return Pessoal
+            "Outro" -> return Outro
     
-    -- Filtra as tarefas pela categoria fornecida e retorna a lista filtrada
-    case listarPorCategoria categoria tarefas of
-        Just tarefasFiltradas -> do
-            putStrLn "Tarefas filtradas por categoria:"
-            mostrarTarefas tarefasFiltradas
-            return tarefasFiltradas
-        Nothing -> do
-            putStrLn "Nenhuma tarefa encontrada ou lista vazia."
-            return []
+        -- Filtra as tarefas pela categoria fornecida e retorna a lista filtrada
+        if null (listarPorCategoria categoria tarefas) then do putStrLn "Nenhuma tarefa com categoria escolhida encontrada ou lista vazia."
+            else do 
+                putStrLn "Tarefas listadas por categoria:"
+                mostrarTarefas (listarPorCategoria categoria tarefas)
+
+listarPorPrioridadeMain :: [Tarefa] -> IO ()
+listarPorPrioridadeMain tarefas = do
+    putStrLn "Digite a prioridade (Baixa, Media, Alta)"
+    prioridadeIO <- getLine
+
+    if notElem prioridadeIO ["Baixa" , "Media" , "Alta"] then do
+        putStrLn $ "Erro! Palavra " ++ prioridadeIO ++ " não corresponde a lista de prioridade (Baixa, Media, Alta)"
+        listarPorPrioridadeMain tarefas
+    else do
+        prioridade <- case prioridadeIO of
+            "Baixa" -> return Baixa
+            "Media" -> return Media
+            "Alta" -> return Alta
+        
+        if null (listarPorPrioridade prioridade tarefas) then do putStrLn "Nenhuma tarefa com prioridade escolhida encontrada ou lista vazia."
+            else do
+                putStrLn "Tarefas listadas por prioridade:"
+                mostrarTarefas (listarPorPrioridade prioridade tarefas)
 
 
-
-ordenarPorPrioridadeMain :: [Tarefa] -> IO [Tarefa]
+ordenarPorPrioridadeMain :: [Tarefa] -> IO ()
 ordenarPorPrioridadeMain tarefas
-    | null tarefas = do return []
+    | null tarefas = do putStrLn "Nenhuma tarefa para ser ordenada!"
     | otherwise = do
         putStrLn "Tarefas oordenadas por prioridade"
         mostrarTarefas (ordenarPorPrioridade tarefas)
-        return []
