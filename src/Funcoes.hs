@@ -9,8 +9,6 @@ import Data.List (sortBy)
 import Data.Ord (comparing)
 import Data.List (isInfixOf)
 import Data.Time.Calendar (diffDays, Day)
-import qualified Data.Map as Map
-
 
 -- Função que transforma todas tarefas de uma lista em uma saida formatada
 -- Exibe o ID, descrição, status, prioridade, categoria, prazo e tags de cada tarefa
@@ -90,15 +88,6 @@ filtrarPorTag :: String -> [Tarefa] -> [Tarefa]
 filtrarPorTag tagProcurada listaTarefa = [t | t <- listaTarefa, tagProcurada `elem` tags t]
 
 nuvemDeTags :: [Tarefa] -> [(String, Int)]
-nuvemDeTags listaTarefa =
-  let
-   todasTags :: [String]
-   todasTags = concatMap tags listaTarefa 
-   -- Concatena todas as tarefas da lista e mapeia as tags, criando uma lista de strings.
-
-   -- A função irá associar Strings (Tags) ao número de vezes que apareceram (Int)
-   contador :: Map.Map String Int
-   contador = Map.fromListWith (+) [(tag, 1) | tag <- todasTags]
-   -- pega cada tag igual e adiciona +1 para cada vez que aparece
-
-   in Map.toList contador
+nuvemDeTags listaTarefa = [(tag, length (filter (\t -> tag `elem` tags t) listaTarefa)) | tag <- tagsUnicas]
+    where
+        tagsUnicas = foldl (\acc x -> if x `elem` acc then acc else acc ++ [x]) [] (concat (map tags listaTarefa))

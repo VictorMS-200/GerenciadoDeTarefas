@@ -2,7 +2,8 @@ module Persistencia(listaMenu, adicionarTarefaMain, removerTarefaMain,
 marcarConcluídaMain, listarPorCategoriaMain, listarPorPrioridadeMain, 
 ordenarPorPrioridadeMain, filtrarPorStatusMain, buscarPorPalavraChaveMain, 
 verificarAtrasosMain, calcularDiasRestantesMain, salvarEmArquivoMain,
-carregarDeArquivoMain, relatorioMain, listarMain, filtrarPorTagMain) where
+carregarDeArquivoMain, relatorioMain, listarMain, filtrarPorTagMain, 
+nuvemDeTagsMain) where
     
 import Funcoes
 import Tipos
@@ -27,7 +28,7 @@ listaMenu = do
     putStrLn "7. Nuvem de tags"
     putStrLn "8. Salvar em arquivo"
     putStrLn "9. Carregar de arquivo"
-    putStrLn "10. Relatório de tarefas"
+    putStrLn "11. Relatório de tarefas"
     putStrLn "11. Sair"
     putStrLn "========================="
 
@@ -278,6 +279,24 @@ calcularDiasRestantesMain tarefas = do
                         Just dias -> if dias > 0 then putStrLn $ "Dias restantes: " ++ show dias else putStrLn $ "Passou do prazo! Tem " ++ show (abs dias) ++" que já passou do prazo da tarefa."
                         Nothing -> putStrLn "A tarefa não possui prazo definido."
 
+filtrarPorTagMain :: [Tarefa] -> IO()
+filtrarPorTagMain tarefas = do
+  putStrLn "Digite a Tag a ser procurada:"
+  tagProcurada <- getLine
+  if null tagProcurada then do
+      putStrLn $ "Erro! Tag inserida inválida."
+      filtrarPorTagMain tarefas
+  else do
+       if null (filtrarPorTag tagProcurada tarefas) then do putStrLn $ "Nenhuma tarefa com a tag " ++ tagProcurada ++ " encontrada."
+       else do
+          mostrarTarefas (filtrarPorTag tagProcurada tarefas)
+
+nuvemDeTagsMain :: [Tarefa] -> IO()
+nuvemDeTagsMain tarefas = do
+     let nuvem = nuvemDeTags tarefas
+     if null nuvem then do putStrLn "Nenhuma tag encontrada."
+     else do mapM_ (\(tag, qtd) -> putStrLn $ "- " ++ tag ++ ": " ++ show qtd) nuvem
+ 
 salvarEmArquivoMain :: [Tarefa] -> IO()
 salvarEmArquivoMain tarefas = do
     putStrLn "Salvando listas no arquivo 'tarefas.txt'"
@@ -319,15 +338,3 @@ relatorioMain tarefas = do
         putStrLn $ "  * Estudos: " ++ show (tarefasEstudos) ++ " " ++ palavraEstudos ++ " " ++ porcentagemDadoFormatado tarefasEstudos totalTarefas
         putStrLn $ "  * Pessoal: " ++ show (tarefasPessoal) ++ " " ++ palavraPessoal ++ " " ++ porcentagemDadoFormatado tarefasPessoal totalTarefas
         putStrLn $ "  * Outro: " ++ show (tarefasOutro) ++ " " ++ palavraOutro ++ " " ++ porcentagemDadoFormatado tarefasOutro totalTarefas
-
-filtrarPorTagMain :: [Tarefa] -> IO()
-filtrarPorTagMain tarefas = do
-  putStrLn "Digite a Tag a ser procurada:"
-  tagProcurada <- getLine
-  if null tagProcurada then do
-      putStrLn $ "Erro! Tag inserida inválida."
-      filtrarPorTagMain tarefas
-  else do
-       if null (filtrarPorTag tagProcurada tarefas) then do putStrLn $ "Nenhuma tarefa com a tag " ++ tagProcurada ++ " encontrada."
-       else do
-          mostrarTarefas (filtrarPorTag tagProcurada tarefas)

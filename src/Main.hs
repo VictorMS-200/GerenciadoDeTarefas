@@ -43,10 +43,10 @@ loop tarefas = do
             calcularDiasRestantesMain tarefas
             loop tarefas
         "6" -> do
-            verificarAtrasosMain tarefas
+            filtrarPorTagMain tarefas
             loop tarefas
         "7" -> do
-            filtrarPorTagMain tarefas
+            nuvemDeTagsMain tarefas
             loop tarefas
         "8" -> do
             salvarEmArquivoMain tarefas
