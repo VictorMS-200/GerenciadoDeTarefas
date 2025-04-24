@@ -117,3 +117,4 @@ Adiciona uma tarefa criada a partir dos dados de entrada do usuário e adiciona 
 - [Data Time Calendar](https://hackage.haskell.org/package/time-1.14/docs/Data-Time-Calendar.html)
 - [Data Time LocalTime](https://hackage.haskell.org/package/time-1.14/docs/Data-Time-LocalTime.html)
 - [GHC](https://www.haskell.org/ghc/)
+- [mapM_](https://stackoverflow.com/questions/27609062/what-is-the-difference-between-mapm-and-mapm-in-haskell)

@@ -1,4 +1,7 @@
-module Persistencia(listaMenu, adicionarTarefaMain, removerTarefaMain, marcarConcluídaMain, listarPorCategoriaMain, listarPorPrioridadeMain, ordenarPorPrioridadeMain, filtrarPorStatusMain, buscarPorPalavraChaveMain, verificarAtrasosMain) where
+module Persistencia(listaMenu, adicionarTarefaMain, removerTarefaMain,
+marcarConcluídaMain, listarPorCategoriaMain, listarPorPrioridadeMain, 
+ordenarPorPrioridadeMain, filtrarPorStatusMain, buscarPorPalavraChaveMain, 
+verificarAtrasosMain, calcularDiasRestantesMain) where
 import Funcoes
 import Tipos
 import System.IO
@@ -214,5 +217,26 @@ verificarAtrasosMain tarefas = do
     localTime <- getZonedTime
     let day = localDay (zonedTimeToLocalTime localTime)
     mostrarTarefas (verificarAtrasos tarefas day)
+
+calcularDiasRestantesMain :: [Tarefa] -> IO()
+calcularDiasRestantesMain tarefas = do
+    putStrLn "Digite o identificador da tarefa que deseja calcular os dias que falta para terminar o prazo:"
+    identificador <- getLine
+    case readMaybe identificador :: Maybe Int of
+        Nothing -> do
+            putStrLn "Erro! Digite novamente o identificador!"
+            calcularDiasRestantesMain tarefas
+        Just idTarefa -> do
+            localTime <- getZonedTime
+            let day = localDay (zonedTimeToLocalTime localTime)
+            case buscarTarefaPorIdentificador tarefas idTarefa of
+                Nothing -> do
+                    putStrLn "Erro! Identificador não existe na lista de tarefas."
+                    calcularDiasRestantesMain tarefas
+                Just tarefaEncontrada -> do
+                    let diasRestantes = calcularDiasRestantes tarefaEncontrada day
+                    case diasRestantes of
+                        Just dias -> if dias > 0 then putStrLn $ "Dias restantes: " ++ show dias else putStrLn $ "Passou do prazo! Tem " ++ show (abs dias) ++ " que já passou do prazo da tarefa."
+                        Nothing -> putStrLn "A tarefa não possui prazo definido."
 
 

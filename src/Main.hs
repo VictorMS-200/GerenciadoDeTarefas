@@ -14,6 +14,10 @@ main :: IO ()
 main = do
     hSetBuffering stdout LineBuffering
     hSetEncoding stdout utf8
+    hSetEncoding stdin utf8
+    hSetEncoding stderr utf8
+    putStrLn "Teste de saída UTF-8: Olá, mundo!"
+
 
     putStrLn "Bem-vindo ao gerenciador de tarefas!"
     loop tarefasInicial
@@ -50,6 +54,10 @@ loop tarefas = do
         "9" -> do
             verificarAtrasosMain tarefas
             loop tarefas
+        "10" -> do
+            calcularDiasRestantesMain tarefas
+            loop tarefas
+        
         "15" -> putStrLn "Saindo do programa..."
         _ -> do
             putStrLn "Opção inválida!"
