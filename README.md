@@ -31,7 +31,7 @@ O projeto foi desenvolvido como parte de um trabalho acadêmico da disciplina de
     - [carregarDeArquivo](#carregardearquivo)
     - [filtrarPorTag](#filtrarportag)
 - [Funções de manipulação de tarefas](#funções-de-manipulação-de-tarefas)
-    - [listaMenu](#listamenu)
+    - [menuOpcoesMain](#menuopcoesmain)
     - [listarMenu](#listarmenu)
     - [listarMain](#listarmain)
     - [adicionarTarefaMain](#adicionartarefamain)
@@ -371,13 +371,36 @@ Recebe uma lista de tarefas e retorna uma lista de tuplas com as tags e a quanti
 
 Essas funções são responsáveis por coletar os dados de entrada do usuário e chamar as funções principais para realizar as operações desejadas.
 
-## listaMenu
+## menuOpcoesMain
 ```haskell
 listaMenu :: IO ()
 ```
 - Retorna: IO ()
 
 ### Funcionalidade:
+
+Exibe um menu de opções para o usuário. Essa função é chamada no modulo Main e tem como objetivo apresentar as opções disponíveis para o usuário interagir com o sistema.
+- As opções disponíveis são:
+    * Adicionar tarefa
+    * Remover tarefa
+    * Marcar tarefa como concluída
+    * Listar tarefas
+    * Calcular dias restantes de uma tarefa
+    * Filtrar tarefas por tag
+    * Nuvem de tags
+    * Salvar tarefas em arquivo
+    * Carregar tarefas de arquivo
+    * Relatório de tarefas
+    * Sair
+
+## listarMenu
+```haskell
+listarMenu :: IO ()
+```
+- Retorna: IO ()
+
+### Funcionalidade:
+
 Exibe um menu de opções de como listar as tarefas para o usuário. Essa função é chamada na função [listarMain](#listarmain) quando o usuário escolhe a opção de listar tarefas.
 
 - As opções disponíveis são:
@@ -389,15 +412,17 @@ Exibe um menu de opções de como listar as tarefas para o usuário. Essa funç�
     * Listar tarefas com ordem por prioridade
     * Listar tarefas com prazo atrasado
 
-## listarMenu
+## listarMain
 ```haskell
-listarMenu :: IO ()
+listarMain :: [Tarefa] -> IO ()
 ```
+
+- Parâmetros: [Tarefa]
 - Retorna: IO ()
 
 ### Funcionalidade:
 
-Exibe o [menu lista](#listaMenu) para o usuário, coleta a opção desejada e chama a função correspondente. Se a opção não for válida, exibe uma mensagem de erro e chama a função novamente.
+Exibe o [menu lista](#listarmenu) para o usuário, coleta a opção desejada e chama a função correspondente. Se a opção não for válida, exibe uma mensagem de erro e chama a função novamente.
 
 ## adicionarTarefaMain
 ```haskell
@@ -568,7 +593,7 @@ filtrarPorTagMain :: [Tarefa] -> IO ()
 - Parâmetros: [Tarefa]
 - Retorna: IO ()
 
-## Funcionalidade:
+### Funcionalidade:
 Filtra as tarefas de acordo com a tag informada pelo usuário. 
 
 ## nuvemDeTagsMain

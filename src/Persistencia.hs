@@ -1,4 +1,4 @@
-module Persistencia(listaMenu, adicionarTarefaMain, removerTarefaMain,
+module Persistencia(menuOpcoesMain, adicionarTarefaMain, removerTarefaMain,
 marcarConcluídaMain, listarPorCategoriaMain, listarPorPrioridadeMain, 
 ordenarPorPrioridadeMain, filtrarPorStatusMain, buscarPorPalavraChaveMain, 
 verificarAtrasosMain, calcularDiasRestantesMain, salvarEmArquivoMain,
@@ -15,8 +15,8 @@ import Text.Read (readMaybe)
 
 
 -- função para mostrar o menu de opcoes
-listaMenu :: IO ()
-listaMenu = do
+menuOpcoesMain :: IO ()
+menuOpcoesMain = do
     putStrLn "========================="
     putStrLn "Escolha uma opcao:"
     putStrLn "1. Adicionar tarefa"
@@ -26,8 +26,8 @@ listaMenu = do
     putStrLn "5. Calcular dias restantes de uma tarefa"
     putStrLn "6. Filtrar tarefas por tag"
     putStrLn "7. Nuvem de tags"
-    putStrLn "8. Salvar em arquivo"
-    putStrLn "9. Carregar de arquivo"
+    putStrLn "8. Salvar em arquivo (tarefas.txt)"
+    putStrLn "9. Carregar tarefas de arquivo (tarefas.txt)"
     putStrLn "10. Relatório de tarefas"
     putStrLn "11. Sair"
     putStrLn "========================="
@@ -44,6 +44,9 @@ listarMenu = do
     putStrLn "6. Listar tarefas com ordem por prioridade"
     putStrLn "7. Listar tarefas com prazo atrasado"
 
+-- Função principal para listar tarefas
+-- Recebe uma lista de tarefas e exibe o menu de listagem
+-- Dependendo da opção escolhida pelo usuário, chama a função correspondente
 listarMain :: [Tarefa] -> IO ()
 listarMain tarefas = do
     listarMenu

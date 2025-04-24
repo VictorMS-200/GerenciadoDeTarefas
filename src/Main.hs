@@ -24,7 +24,7 @@ main = do
 
 loop :: [Tarefa] -> IO ()
 loop tarefas = do
-    listaMenu
+    menuOpcoesMain
     opcao <- getLine
     case opcao of
         "1" -> do
