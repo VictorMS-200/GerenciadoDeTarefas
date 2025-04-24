@@ -112,7 +112,7 @@ adicionarTarefaMain tarefas = do
         -- Substitui os caracteres '&' por espaços para separar as tags.
         let tags = words (map (\c -> if c == '&' then ' ' else c) tagsIO)
 
-        putStrLn "Por ultimo, digite o ID da tarefa:"
+        putStrLn "Por último, digite o ID da tarefa:"
         idStr <- getLine
 
         case readMaybe idStr :: Maybe Int of
@@ -198,11 +198,11 @@ listarPorCategoriaMain tarefas = do
                 putStrLn "Tarefas listadas por categoria:"
                 mostrarTarefas (listarPorCategoria categoria tarefas)
 
-listarPorPrioridadeMain :: [Tarefa] -> IO ()
+listarPorPrioridadeMain :: [Tarefa] -> IO () -- Recebe uma lista de tarefas e retorna a lista filtrada por prioridade
 listarPorPrioridadeMain tarefas = do
     putStrLn "Digite a prioridade (Baixa, Media, Alta)"
     prioridadeIO <- getLine
-
+    -- Verifica se a prioridade é válida, caso contrário, chama a função novamente
     if notElem prioridadeIO ["Baixa" , "Media" , "Alta"] then do
         putStrLn $ "Erro! Palavra " ++ prioridadeIO ++ " não corresponde a lista de prioridade (Baixa, Media, Alta)"
         listarPorPrioridadeMain tarefas
@@ -211,24 +211,27 @@ listarPorPrioridadeMain tarefas = do
             "Baixa" -> return Baixa
             "Media" -> return Media
             "Alta" -> return Alta
-        
+        -- Filtra as tarefas pela prioridade fornecida e retorna a lista filtrada
         if null (listarPorPrioridade prioridade tarefas) then do putStrLn "Nenhuma tarefa com prioridade escolhida encontrada ou lista vazia."
             else do
                 putStrLn "Tarefas listadas por prioridade:"
                 mostrarTarefas (listarPorPrioridade prioridade tarefas)
 
-ordenarPorPrioridadeMain :: [Tarefa] -> IO ()
+ordenarPorPrioridadeMain :: [Tarefa] -> IO () -- Recebe uma lista de tarefas e retorna a lista ordenada por prioridade
 ordenarPorPrioridadeMain tarefas
+    -- Verifica se a lista de tarefas está vazia
     | null tarefas = do putStrLn "Nenhuma tarefa para ser ordenada!"
     | otherwise = do
         putStrLn "Tarefas oordenadas por prioridade"
         mostrarTarefas (ordenarPorPrioridade tarefas)
 
-filtrarPorStatusMain :: [Tarefa] -> IO()
+filtrarPorStatusMain :: [Tarefa] -> IO() -- Recebe uma lista de tarefas e retorna a lista filtrada por status
 filtrarPorStatusMain tarefas = do
+    -- Solicita o status ao usuário
     putStrLn "Digite o status (Pendente, Concluída):"
     statusIO <- getLine
 
+    -- Verifica se o status é válido, caso contrário, chama a função novamente
     if notElem statusIO ["Pendente", "Concluída"] then do 
         putStrLn $ "Erro! Palavra " ++ statusIO ++ " não corresponde aos status ['Pendente', 'Concluída']."
         filtrarPorStatusMain tarefas
@@ -239,10 +242,12 @@ filtrarPorStatusMain tarefas = do
 
         mostrarTarefas (filtrarPorStatus status tarefas)
     
-buscarPorPalavraChaveMain :: [Tarefa] -> IO()
+buscarPorPalavraChaveMain :: [Tarefa] -> IO() -- Recebe uma lista de tarefas e retorna a lista filtrada por palavra-chave
 buscarPorPalavraChaveMain tarefas = do 
+    -- Solicita a palavra-chave ao usuário
     putStrLn "Digite a palavra chave a ser procurada:"
     palavraChaveIO <- getLine
+    -- Verifica se a palavra-chave não está vazia, caso contrário, chama a função novamente
     if null palavraChaveIO then do 
         putStrLn $ "Erro! Palavra invalida, tente novamente."
         buscarPorPalavraChaveMain tarefas
@@ -251,38 +256,44 @@ buscarPorPalavraChaveMain tarefas = do
         else do
             mostrarTarefas (buscarPorPalavraChave palavraChaveIO tarefas)
 
-verificarAtrasosMain :: [Tarefa] -> IO()
+verificarAtrasosMain :: [Tarefa] -> IO() -- Recebe uma lista de tarefas e retorna a lista filtrada por tarefas com prazo atrasado
 verificarAtrasosMain tarefas = do
     putStrLn "Tarefas com prazo atrasado:"
-    localTime <- getZonedTime
-    let day = localDay (zonedTimeToLocalTime localTime)
-    mostrarTarefas (verificarAtrasos tarefas day)
+    localTime <- getZonedTime -- Obtém o horário local atual
+    let day = localDay (zonedTimeToLocalTime localTime) -- Converte para o tipo Day
+    mostrarTarefas (verificarAtrasos tarefas day) -- Filtra as tarefas com prazo atrasado e exibe
 
-calcularDiasRestantesMain :: [Tarefa] -> IO()
+calcularDiasRestantesMain :: [Tarefa] -> IO() -- Recebe uma lista de tarefas e retorna a quantidade de dias restantes para o prazo da tarefa
 calcularDiasRestantesMain tarefas = do
+    -- Solicita o identificador da tarefa ao usuário
     putStrLn "Digite o identificador da tarefa que deseja calcular os dias que falta para terminar o prazo:"
     identificador <- getLine
+    -- Verifica se o identificador é um número inteiro
     case readMaybe identificador :: Maybe Int of
+
         Nothing -> do
             putStrLn "Erro! Digite novamente o identificador!"
             calcularDiasRestantesMain tarefas
         Just idTarefa -> do
-            localTime <- getZonedTime
-            let day = localDay (zonedTimeToLocalTime localTime)
+            localTime <- getZonedTime -- Obtém o horário local atual
+            let day = localDay (zonedTimeToLocalTime localTime) -- Converte para o tipo Day
+            -- Busca a tarefa pelo identificador fornecido
             case buscarTarefaPorIdentificador tarefas idTarefa of
                 Nothing -> do
                     putStrLn "Erro! Identificador não existe na lista de tarefas."
                     calcularDiasRestantesMain tarefas
                 Just tarefaEncontrada -> do
+                    -- Verifica se a tarefa possui prazo definido
                     let diasRestantes = calcularDiasRestantes tarefaEncontrada day
                     case diasRestantes of
                         Just dias -> if dias > 0 then putStrLn $ "Dias restantes: " ++ show dias else putStrLn $ "Passou do prazo! Tem " ++ show (abs dias) ++" que já passou do prazo da tarefa."
                         Nothing -> putStrLn "A tarefa não possui prazo definido."
 
-filtrarPorTagMain :: [Tarefa] -> IO()
+filtrarPorTagMain :: [Tarefa] -> IO() -- Recebe uma lista de tarefas e retorna a lista filtrada por tag
 filtrarPorTagMain tarefas = do
   putStrLn "Digite a Tag a ser procurada:"
   tagProcurada <- getLine
+  -- Verifica se a tag não está vazia, caso contrário, chama a função novamente
   if null tagProcurada then do
       putStrLn $ "Erro! Tag inserida inválida."
       filtrarPorTagMain tarefas
@@ -291,26 +302,31 @@ filtrarPorTagMain tarefas = do
        else do
           mostrarTarefas (filtrarPorTag tagProcurada tarefas)
 
-nuvemDeTagsMain :: [Tarefa] -> IO()
+nuvemDeTagsMain :: [Tarefa] -> IO() -- Recebe uma lista de tarefas e retorna a nuvem de tags
 nuvemDeTagsMain tarefas = do
+    -- Solicita a tag ao usuário
      let nuvem = nuvemDeTags tarefas
+     -- Verifica se a nuvem de tags está vazia, caso contrário, chama a função novamente
      if null nuvem then do putStrLn "Nenhuma tag encontrada."
      else do mapM_ (\(tag, qtd) -> putStrLn $ "- " ++ tag ++ ": " ++ show qtd) nuvem
  
-salvarEmArquivoMain :: [Tarefa] -> IO()
+salvarEmArquivoMain :: [Tarefa] -> IO() -- Recebe uma lista de tarefas e salva em um arquivo
 salvarEmArquivoMain tarefas = do
     putStrLn "Salvando listas no arquivo 'tarefas.txt'"
+    -- Por padrão, o arquivo é o "tarefas.txt"
     salvarEmArquivo "tarefas.txt" tarefas
 
-carregarDeArquivoMain :: IO [Tarefa]
+carregarDeArquivoMain :: IO [Tarefa] -- Recebe uma lista de tarefas e carrega de um arquivo
 carregarDeArquivoMain = do
+    -- Carrega as tarefas do arquivo "tarefas.txt"
     putStrLn "Carregando tarefas do arquivo 'tarefas.txt'"
-    tarefas <- carregarDeArquivo "tarefas.txt"
+    tarefas <- carregarDeArquivo "tarefas.txt" -- Por padrão, o arquivo é o "tarefas.txt"
     putStrLn "Tarefas carregadas com sucesso!"
     return tarefas
 
-relatorioMain :: [Tarefa] -> IO()
+relatorioMain :: [Tarefa] -> IO() -- Recebe uma lista de tarefas e retorna um relatório com as informações das tarefas
 relatorioMain tarefas = do
+    -- Pega o total de tarefas, tarefas pendentes, concluídas e das categorias
     let totalTarefas = length tarefas
     let tarefasPendentes = length (filter (\t -> status t == Pendente) tarefas)
     let tarefasConcluidas = length (filter (\t -> status t == Concluída) tarefas)
@@ -318,6 +334,8 @@ relatorioMain tarefas = do
     let tarefasEstudos = length (filter (\t -> categoria t == Estudos) tarefas)
     let tarefasPessoal = length (filter (\t -> categoria t == Pessoal) tarefas)
     let tarefasOutro = length (filter (\t -> categoria t == Outro) tarefas)
+
+    -- Verifica se contém mais de uma tarefa e coloca a palavra no plural ou singular
     let palavraTotalTarefas = if totalTarefas == 1 then "tarefa" else "tarefas"
     let palavraTrabalho = if tarefasTrabalho == 1 then "tarefa" else "tarefas"
     let palavraEstudos = if tarefasEstudos == 1 then "tarefa" else "tarefas"
@@ -326,6 +344,7 @@ relatorioMain tarefas = do
 
     if totalTarefas == 0 then do
         putStrLn "Nenhuma tarefa cadastrada!"
+        
     else do
         putStrLn "========================="
         putStrLn "Relatório de Tarefas:"
