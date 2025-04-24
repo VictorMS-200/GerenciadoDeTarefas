@@ -2,7 +2,7 @@
 
 Esse é um sistema de gerenciamento de tarefas feito usando a linguagem Haskell. O sistema permite adicionar, remover e listar tarefas, além de filtrar por prioridade, status e categoria.
 
-O projeto foi desenvolvido como parte de um trabalho acadêmico de uma disciplina de programação funcional da Universidade Federal de Uberlândia (UFU). O objetivo do projeto é praticar os conceitos de programação funcional e aprender a usar a linguagem Haskell.
+O projeto foi desenvolvido como parte de um trabalho acadêmico da disciplina de programação funcional da Universidade Federal de Uberlândia (UFU). O objetivo do projeto é praticar os conceitos de programação funcional e aprender a usar a linguagem Haskell.
 
 # Sumário
 - [Como usar](#como-usar)
