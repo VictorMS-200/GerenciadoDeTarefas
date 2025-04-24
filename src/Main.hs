@@ -63,6 +63,9 @@ loop tarefas = do
         "14" -> do
             tarefasCarregadas <- carregarDeArquivoMain
             loop tarefasCarregadas
+        "11" -> do
+            relatorioMain tarefas
+            loop tarefas
         "15" -> putStrLn "Saindo do programa..."
         _ -> do
             putStrLn "Opção inválida!"

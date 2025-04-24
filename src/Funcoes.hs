@@ -2,7 +2,8 @@ module Funcoes(adicionarTarefa, removerTarefa, marcarConcluída,
 listarPorCategoria, mostrarTarefas, listarPorPrioridade, 
 ordenarPorPrioridade, filtrarPorStatus, buscarPorPalavraChave, 
 verificarAtrasos, validarIdentificador, calcularDiasRestantes,
-buscarTarefaPorIdentificador, salvarEmArquivo, carregarDeArquivo) where
+buscarTarefaPorIdentificador, salvarEmArquivo, carregarDeArquivo,
+porcentagemDadoFormatado) where
 import Tipos
 import Data.List (sortBy)
 import Data.Ord (comparing)
@@ -14,6 +15,9 @@ import Data.Time.Calendar (diffDays, Day)
 -- Exibe o ID, descrição, status, prioridade, categoria, prazo e tags de cada tarefa
 mostrarTarefas :: [Tarefa] -> IO ()
 mostrarTarefas listaDeTarefas = mapM_ mostrarTarefa listaDeTarefas
+
+porcentagemDadoFormatado :: Int -> Int -> String
+porcentagemDadoFormatado dado porcentagem = " (" ++ show (fromIntegral(dado * 100) / fromIntegral(porcentagem)) ++ "%)"
 
 buscarTarefaPorIdentificador :: [Tarefa] -> Int -> Maybe Tarefa
 buscarTarefaPorIdentificador listaDeTarefas identificador = case filter (\x -> idTarefa x == identificador) listaDeTarefas of

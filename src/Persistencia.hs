@@ -2,7 +2,7 @@ module Persistencia(listaMenu, adicionarTarefaMain, removerTarefaMain,
 marcarConcluídaMain, listarPorCategoriaMain, listarPorPrioridadeMain, 
 ordenarPorPrioridadeMain, filtrarPorStatusMain, buscarPorPalavraChaveMain, 
 verificarAtrasosMain, calcularDiasRestantesMain, salvarEmArquivoMain,
-carregarDeArquivoMain) where
+carregarDeArquivoMain, relatorioMain) where
 import Funcoes
 import Tipos
 import System.IO
@@ -251,3 +251,34 @@ carregarDeArquivoMain = do
     tarefas <- carregarDeArquivo "tarefas.txt"
     putStrLn "Tarefas carregadas com sucesso!"
     return tarefas
+
+
+relatorioMain :: [Tarefa] -> IO()
+relatorioMain tarefas = do
+    let totalTarefas = length tarefas
+    let tarefasPendentes = length (filter (\t -> status t == Pendente) tarefas)
+    let tarefasConcluidas = length (filter (\t -> status t == Concluída) tarefas)
+    let tarefasTrabalho = length (filter (\t -> categoria t == Trabalho) tarefas)
+    let tarefasEstudos = length (filter (\t -> categoria t == Estudos) tarefas)
+    let tarefasPessoal = length (filter (\t -> categoria t == Pessoal) tarefas)
+    let tarefasOutro = length (filter (\t -> categoria t == Outro) tarefas)
+    let palavraTotalTarefas = if totalTarefas == 1 then "tarefa" else "tarefas"
+    let palavraTrabalho = if tarefasTrabalho == 1 then "tarefa" else "tarefas"
+    let palavraEstudos = if tarefasEstudos == 1 then "tarefa" else "tarefas"
+    let palavraPessoal = if tarefasPessoal == 1 then "tarefa" else "tarefas"
+    let palavraOutro = if tarefasOutro == 1 then "tarefa" else "tarefas"
+    
+    if totalTarefas == 0 then do
+        putStrLn "Nenhuma tarefa cadastrada!"
+    else do
+        putStrLn "========================="
+        putStrLn "Relatório de Tarefas:"
+        putStrLn "========================="
+        putStrLn $ "- Total de " ++ palavraTotalTarefas ++ " : " ++ show totalTarefas
+        putStrLn $ "- Tarefas pendentes: " ++ show tarefasPendentes ++ porcentagemDadoFormatado tarefasPendentes totalTarefas
+        putStrLn $ "- Tarefas concluídas: " ++ show tarefasConcluidas ++ porcentagemDadoFormatado tarefasConcluidas totalTarefas
+        putStrLn $ "- Distribuíção por categoria:"
+        putStrLn $ "  * Trabalho: " ++ show (tarefasTrabalho) ++ " " ++ palavraTrabalho ++ " " ++ porcentagemDadoFormatado tarefasTrabalho totalTarefas 
+        putStrLn $ "  * Estudos: " ++ show (tarefasEstudos) ++ " " ++ palavraEstudos ++ " " ++ porcentagemDadoFormatado tarefasEstudos totalTarefas
+        putStrLn $ "  * Pessoal: " ++ show (tarefasPessoal) ++ " " ++ palavraPessoal ++ " " ++ porcentagemDadoFormatado tarefasPessoal totalTarefas
+        putStrLn $ "  * Outro: " ++ show (tarefasOutro) ++ " " ++ palavraOutro ++ " " ++ porcentagemDadoFormatado tarefasOutro totalTarefas
