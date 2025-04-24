@@ -37,36 +37,21 @@ loop tarefas = do
             tarefasAtualizadas <- marcarConcluídaMain tarefas
             loop tarefasAtualizadas
         "4" -> do
-            listarPorCategoriaMain tarefas
+            listarMain tarefas
             loop tarefas
         "5" -> do
-            listarPorPrioridadeMain tarefas
-            loop tarefas
-        "6" -> do
-            ordenarPorPrioridadeMain tarefas
-            loop tarefas 
-        "7" -> do
-            filtrarPorStatusMain tarefas
-            loop tarefas
-        "8" -> do
-            buscarPorPalavraChaveMain tarefas
-            loop tarefas
-        "9" -> do
-            verificarAtrasosMain tarefas
-            loop tarefas
-        "10" -> do
             calcularDiasRestantesMain tarefas
             loop tarefas
-        "13" -> do
+        "8" -> do
             salvarEmArquivoMain tarefas
             loop tarefas
-        "14" -> do
+        "9" -> do
             tarefasCarregadas <- carregarDeArquivoMain
             loop tarefasCarregadas
-        "11" -> do
+        "10" -> do
             relatorioMain tarefas
             loop tarefas
-        "15" -> putStrLn "Saindo do programa..."
+        "11" -> putStrLn "Saindo do programa..."
         _ -> do
             putStrLn "Opção inválida!"
             loop tarefas

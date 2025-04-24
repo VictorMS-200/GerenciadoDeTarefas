@@ -84,3 +84,6 @@ carregarDeArquivo arquivo = do
     conteudo <- readFile arquivo
     let tarefas = read conteudo :: [Tarefa]
     return tarefas
+
+filtrarPorTag :: String -> [Tarefa] -> [Tarefa]
+filtrarPorTag tag listaDeTarefas = [t | t <- listaDeTarefas, elem tag (tags t)]

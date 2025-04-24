@@ -2,7 +2,7 @@ module Persistencia(listaMenu, adicionarTarefaMain, removerTarefaMain,
 marcarConcluídaMain, listarPorCategoriaMain, listarPorPrioridadeMain, 
 ordenarPorPrioridadeMain, filtrarPorStatusMain, buscarPorPalavraChaveMain, 
 verificarAtrasosMain, calcularDiasRestantesMain, salvarEmArquivoMain,
-carregarDeArquivoMain, relatorioMain) where
+carregarDeArquivoMain, relatorioMain, listarMain) where
 import Funcoes
 import Tipos
 import System.IO
@@ -20,19 +20,27 @@ listaMenu = do
     putStrLn "1. Adicionar tarefa"
     putStrLn "2. Remover tarefa"
     putStrLn "3. Marcar tarefa como concluída"
-    putStrLn "4. Listar tarefas por categoria"
-    putStrLn "5. Listar tarefas por prioridade"
-    putStrLn "6. Ordenar tarefas por prioridade"
-    putStrLn "7. Filtrar tarefas por status"
-    putStrLn "8. Buscar tarefas por palavra-chave"
-    putStrLn "9. Verificar atrasos"
-    putStrLn "10. Calcular dias restantes para a tarefa"
-    putStrLn "11. Filtrar tarefas por tag"
-    putStrLn "12. Nuvem de tags"
-    putStrLn "13. Salvar em arquivo"
-    putStrLn "14. Carregar de arquivo"
-    putStrLn "15. Sair"
+    putStrLn "4. Listar tarefas"
+    putStrLn "5. Calcular dias restantes de uma tarefa"
+    putStrLn "6. Filtrar tarefas por tag"
+    putStrLn "7. Nuvem de tags"
+    putStrLn "8. Salvar em arquivo"
+    putStrLn "9. Carregar de arquivo"
+    putStrLn "10. Relatório de tarefas"
+    putStrLn "11. Sair"
     putStrLn "========================="
+
+-- Função para mostar opções de listagem
+listarMenu :: IO ()
+listarMenu = do
+    putStrLn "Deseja listar as tarefas como?"
+    putStrLn "1. Listar todas as tarefas"
+    putStrLn "2. Listar tarefas por categoria"
+    putStrLn "3. Listar tarefas por prioridade"
+    putStrLn "4. Listar tarefas por status"
+    putStrLn "5. Listar tarefas por palavra-chave"
+    putStrLn "6. Listar tarefas com ordem por prioridade"
+    putStrLn "7. Listar tarefas com prazo atrasado"
 
 adicionarTarefaMain :: [Tarefa] -> IO [Tarefa] -- Recebe uma lista de tarefas e retorna a lista atualizada com a nova tarefa adicionada
 adicionarTarefaMain tarefas = do
@@ -110,31 +118,60 @@ removerTarefaMain tarefas = do
     putStrLn "Digite o ID da tarefa a ser removida:"
     idStr <- getLine
     -- Verifica se o ID é um número inteiro
-    let idTarefa = read idStr :: Int
-    case removerTarefa idTarefa tarefas of
-        Just tarefasAtualizadas -> do
-            putStrLn "Tarefa removida com sucesso!"
-            return tarefasAtualizadas
+    case readMaybe idStr :: Maybe Int of
         Nothing -> do
-            putStrLn "Tarefa não encontrada ou lista vazia."
-            return tarefas
+            putStrLn "Erro: Entrada inválida. Certifique-se de digitar um número inteiro."
+            removerTarefaMain tarefas -- Chama a função novamente para solicitar o ID
+        Just idTarefa -> do
+            case removerTarefa idTarefa tarefas of
+                Just tarefasAtualizadas -> do
+                    putStrLn "Tarefa removida com sucesso!"
+                    return tarefasAtualizadas
+                Nothing -> do
+                    putStrLn "Tarefa não encontrada ou lista vazia."
+                    return tarefas
 
 marcarConcluídaMain :: [Tarefa] -> IO [Tarefa] -- Recebe uma lista de tarefas e retorna a lista atualizada com a tarefa marcada como concluída do identificador fornecido
 marcarConcluídaMain tarefas = do
     -- Solicita o ID da tarefa a ser marcada como concluída ao usuário
     putStrLn "Digite o ID da tarefa a ser marcada como concluída:"
     idStr <- getLine
-    let idTarefa = read idStr :: Int
-    
-    -- Chama a função marcarConcluída para atualizar o status da tarefa
-    -- Se a tarefa for encontrada, atualiza o status para Concluída e retorna a lista atualizada
-    case marcarConcluída idTarefa tarefas of
-        Just tarefasConcluidas -> do
-            putStrLn "Tarefa marcada como concluída com sucesso!"
-            return tarefasConcluidas
+    -- Verifica se o ID é um número inteiro
+    case readMaybe idStr :: Maybe Int of
         Nothing -> do
-            putStrLn "Tarefa não encontrada ou lista vazia."
-            return tarefas
+            putStrLn "Erro: Entrada inválida. Certifique-se de digitar um número inteiro."
+            marcarConcluídaMain tarefas -- Chama a função novamente para solicitar o ID
+        Just idTarefa -> do
+            case marcarConcluída idTarefa tarefas of
+                Just tarefasConcluidas -> do
+                    putStrLn "Tarefa marcada como concluída com sucesso!"
+                    return tarefasConcluidas
+                Nothing -> do
+                    putStrLn "Tarefa não encontrada ou lista vazia."
+                    return tarefas
+
+listarMain :: [Tarefa] -> IO ()
+listarMain tarefas = do
+    listarMenu
+    opcao <- getLine
+
+    case opcao of
+        "1" -> listarGeralMain tarefas
+        "2" -> listarPorCategoriaMain tarefas
+        "3" -> listarPorPrioridadeMain tarefas
+        "4" -> filtrarPorStatusMain tarefas
+        "5" -> buscarPorPalavraChaveMain tarefas
+        "6" -> ordenarPorPrioridadeMain tarefas
+        "7" -> verificarAtrasosMain tarefas
+        _   -> putStrLn "Opção inválida!"
+
+listarGeralMain :: [Tarefa] -> IO () -- Recebe uma lista de tarefas e retorna a lista geral
+listarGeralMain tarefas = do
+    if null tarefas then do
+        putStrLn "Nenhuma tarefa cadastrada!"
+    else do
+        putStrLn "Tarefas cadastradas:"
+        mostrarTarefas tarefas
 
 listarPorCategoriaMain :: [Tarefa] -> IO () -- Recebe uma lista de tarefas e retorna a lista filtrada por categoria
 listarPorCategoriaMain tarefas = do
@@ -252,7 +289,6 @@ carregarDeArquivoMain = do
     putStrLn "Tarefas carregadas com sucesso!"
     return tarefas
 
-
 relatorioMain :: [Tarefa] -> IO()
 relatorioMain tarefas = do
     let totalTarefas = length tarefas
@@ -267,7 +303,7 @@ relatorioMain tarefas = do
     let palavraEstudos = if tarefasEstudos == 1 then "tarefa" else "tarefas"
     let palavraPessoal = if tarefasPessoal == 1 then "tarefa" else "tarefas"
     let palavraOutro = if tarefasOutro == 1 then "tarefa" else "tarefas"
-    
+
     if totalTarefas == 0 then do
         putStrLn "Nenhuma tarefa cadastrada!"
     else do
