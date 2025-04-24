@@ -56,13 +56,19 @@ O projeto foi desenvolvido como parte de um trabalho acadêmico da disciplina de
 # Como usar
 Para compilar e executar o projeto, primeiro, você precisa ter o [GHC (Glasgow Haskell Compiler)](https://www.haskell.org/downloads/) instalado.
 
-Após instalar o GHC, você pode clonar o repositório do projeto e navegar até o diretório `src`:
+Após instalar o GHC, você pode clonar o repositório do projeto usando o seguinte comando:
 
-```bash
-cd src
+```bash	
+git clone https://github.com/VictorMS-200/GerenciadoDeTarefas.git
 ```
 
-E então, você pode compilar o projeto com o seguinte comando:
+Navegue até o diretório `src`:
+
+```bash
+cd GerenciadoDeTarefas/src
+```
+
+Então, você pode compilar o projeto com o seguinte comando:
 
 ```bash
 ghc -o gerenciadorDeTarefas .\Main.hs 
