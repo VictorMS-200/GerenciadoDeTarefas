@@ -634,3 +634,4 @@ Mostra o total de tarefas cadastrados, as tarefas pendentes e concluídas e a po
 - [mapM_](https://stackoverflow.com/questions/27609062/what-is-the-difference-between-mapm-and-mapm-in-haskell)
 - [writeFile](https://hackage.haskell.org/package/base-4.21.0.0/docs/Prelude.html#v:writeFile)
 - [isInfixOf](https://hackage.haskell.org/package/base-4.21.0.0/docs/Data-List.html#v:isInfixOf)
+- [comparing](https://hackage.haskell.org/package/base-4.21.0.0/docs/Data-Ord.html#v:comparing)
