@@ -49,15 +49,18 @@ loop tarefas = do
             filtrarPorTagMain tarefas
             loop tarefas
         "8" -> do
-            salvarEmArquivoMain tarefas
+            nuvemDeTagsMain tarefas
             loop tarefas
         "9" -> do
+            salvarEmArquivoMain tarefas
+            loop tarefas
+        "10" -> do
             tarefasCarregadas <- carregarDeArquivoMain
             loop tarefasCarregadas
-        "10" -> do
+        "11" -> do
             relatorioMain tarefas
             loop tarefas
-        "11" -> putStrLn "Saindo do programa..."
+        "12" -> putStrLn "Saindo do programa..."
         _ -> do
             putStrLn "Opção inválida!"
             loop tarefas
