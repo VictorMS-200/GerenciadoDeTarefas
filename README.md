@@ -260,7 +260,7 @@ ordenarPorPrioridade :: [Tarefa] -> [Tarefa]
 
 Recebe uma prioridade e uma lista de tarefas, e retorna a lista de tarefas filtradas pela prioridade. Se a prioridade não for encontrada, retorna uma lista vazia.
 
-### observação:
+### Observação:
 - A prioridade é ordenada da seguinte forma: Alta, Média, Baixa. As tarefas com prioridade mais alta aparecem primeiro na lista.
 
 ## filtrarPorStatus
@@ -350,7 +350,7 @@ filtrarPorTag :: String -> [Tarefa] -> [Tarefa]
 - Parâmetros: String -> [Tarefa]
 - Retorna: [Tarefa]
 
-## Funcionalidade:
+### Funcionalidade:
 
 Filtra as tarefas com base na tag informada. Retorna uma lista de tarefas que contém a tag especificada. Se não houver tarefas com a tag, retorna uma lista vazia.
 
@@ -395,7 +395,7 @@ listarMenu :: IO ()
 ```
 - Retorna: IO ()
 
-## Funcionalidade:
+### Funcionalidade:
 
 Exibe o [menu lista](#listaMenu) para o usuário, coleta a opção desejada e chama a função correspondente. Se a opção não for válida, exibe uma mensagem de erro e chama a função novamente.
 
@@ -507,7 +507,7 @@ filtrarPorStatusMain :: [Tarefa] -> IO ()
 - Parâmetros: [Tarefa]
 - Retorna: IO ()
 
-## Funcionalidade:
+### Funcionalidade:
 Filtra as tarefas de acordo com o status informado pelo usuário. Essa função é chamada quando o usuário escolhe a opção de listar tarefas por status na função [listarMain](#listarmain).
 
 ### Observação:
@@ -559,7 +559,7 @@ Calcula a quantidade de dias restantes para o prazo de uma tarefa. Se o dia da t
 ### Observação:
 - Se o prazo já tiver passado, o sistema irá retornar uma mensagem falando quantos dias já passou do prazo.
 
-### filtrarPorTagMain
+## filtrarPorTagMain
 
 ```haskell
 filtrarPorTagMain :: [Tarefa] -> IO ()
@@ -600,7 +600,7 @@ Salva a lista de tarefas em um arquivo. O usuário deve informar o nome do arqui
 - O arquivo será salvo no mesmo diretório onde o programa está sendo executado.
 - O arquivo tem o nome de "tarefas.txt" e o formato de texto simples.
 
-### carregarDeArquivoMain
+## carregarDeArquivoMain
     
 ```haskell
 carregarDeArquivoMain :: IO [Tarefa]
