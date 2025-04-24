@@ -2,7 +2,8 @@ module Persistencia(listaMenu, adicionarTarefaMain, removerTarefaMain,
 marcarConcluídaMain, listarPorCategoriaMain, listarPorPrioridadeMain, 
 ordenarPorPrioridadeMain, filtrarPorStatusMain, buscarPorPalavraChaveMain, 
 verificarAtrasosMain, calcularDiasRestantesMain, salvarEmArquivoMain,
-carregarDeArquivoMain, relatorioMain, listarMain) where
+carregarDeArquivoMain, relatorioMain, listarMain, filtrarPorTagMain) where
+    
 import Funcoes
 import Tipos
 import System.IO
@@ -41,6 +42,21 @@ listarMenu = do
     putStrLn "5. Listar tarefas por palavra-chave"
     putStrLn "6. Listar tarefas com ordem por prioridade"
     putStrLn "7. Listar tarefas com prazo atrasado"
+
+listarMain :: [Tarefa] -> IO ()
+listarMain tarefas = do
+    listarMenu
+    opcao <- getLine
+
+    case opcao of
+        "1" -> listarGeralMain tarefas
+        "2" -> listarPorCategoriaMain tarefas
+        "3" -> listarPorPrioridadeMain tarefas
+        "4" -> filtrarPorStatusMain tarefas
+        "5" -> buscarPorPalavraChaveMain tarefas
+        "6" -> ordenarPorPrioridadeMain tarefas
+        "7" -> verificarAtrasosMain tarefas
+        _   -> putStrLn "Opção inválida!"
 
 adicionarTarefaMain :: [Tarefa] -> IO [Tarefa] -- Recebe uma lista de tarefas e retorna a lista atualizada com a nova tarefa adicionada
 adicionarTarefaMain tarefas = do
@@ -149,21 +165,6 @@ marcarConcluídaMain tarefas = do
                 Nothing -> do
                     putStrLn "Tarefa não encontrada ou lista vazia."
                     return tarefas
-
-listarMain :: [Tarefa] -> IO ()
-listarMain tarefas = do
-    listarMenu
-    opcao <- getLine
-
-    case opcao of
-        "1" -> listarGeralMain tarefas
-        "2" -> listarPorCategoriaMain tarefas
-        "3" -> listarPorPrioridadeMain tarefas
-        "4" -> filtrarPorStatusMain tarefas
-        "5" -> buscarPorPalavraChaveMain tarefas
-        "6" -> ordenarPorPrioridadeMain tarefas
-        "7" -> verificarAtrasosMain tarefas
-        _   -> putStrLn "Opção inválida!"
 
 listarGeralMain :: [Tarefa] -> IO () -- Recebe uma lista de tarefas e retorna a lista geral
 listarGeralMain tarefas = do
@@ -318,3 +319,15 @@ relatorioMain tarefas = do
         putStrLn $ "  * Estudos: " ++ show (tarefasEstudos) ++ " " ++ palavraEstudos ++ " " ++ porcentagemDadoFormatado tarefasEstudos totalTarefas
         putStrLn $ "  * Pessoal: " ++ show (tarefasPessoal) ++ " " ++ palavraPessoal ++ " " ++ porcentagemDadoFormatado tarefasPessoal totalTarefas
         putStrLn $ "  * Outro: " ++ show (tarefasOutro) ++ " " ++ palavraOutro ++ " " ++ porcentagemDadoFormatado tarefasOutro totalTarefas
+
+filtrarPorTagMain :: [Tarefa] -> IO()
+filtrarPorTagMain tarefas = do
+  putStrLn "Digite a Tag a ser procurada:"
+  tagProcurada <- getLine
+  if null tagProcurada then do
+      putStrLn $ "Erro! Tag inserida inválida."
+      filtrarPorTagMain tarefas
+  else do
+       if null (filtrarPorTag tagProcurada tarefas) then do putStrLn $ "Nenhuma tarefa com a tag " ++ tagProcurada ++ " encontrada."
+       else do
+          mostrarTarefas (filtrarPorTag tagProcurada tarefas)

@@ -3,12 +3,13 @@ listarPorCategoria, mostrarTarefas, listarPorPrioridade,
 ordenarPorPrioridade, filtrarPorStatus, buscarPorPalavraChave, 
 verificarAtrasos, validarIdentificador, calcularDiasRestantes,
 buscarTarefaPorIdentificador, salvarEmArquivo, carregarDeArquivo,
-porcentagemDadoFormatado) where
+porcentagemDadoFormatado, nuvemDeTags, filtrarPorTag) where
 import Tipos
 import Data.List (sortBy)
 import Data.Ord (comparing)
 import Data.List (isInfixOf)
 import Data.Time.Calendar (diffDays, Day)
+import qualified Data.Map as Map
 
 
 -- Função que transforma todas tarefas de uma lista em uma saida formatada
@@ -86,4 +87,18 @@ carregarDeArquivo arquivo = do
     return tarefas
 
 filtrarPorTag :: String -> [Tarefa] -> [Tarefa]
-filtrarPorTag tag listaDeTarefas = [t | t <- listaDeTarefas, elem tag (tags t)]
+filtrarPorTag tagProcurada listaTarefa = [t | t <- listaTarefa, tagProcurada `elem` tags t]
+
+nuvemDeTags :: [Tarefa] -> [(String, Int)]
+nuvemDeTags listaTarefa =
+  let
+   todasTags :: [String]
+   todasTags = concatMap tags listaTarefa 
+   -- Concatena todas as tarefas da lista e mapeia as tags, criando uma lista de strings.
+
+   -- A função irá associar Strings (Tags) ao número de vezes que apareceram (Int)
+   contador :: Map.Map String Int
+   contador = Map.fromListWith (+) [(tag, 1) | tag <- todasTags]
+   -- pega cada tag igual e adiciona +1 para cada vez que aparece
+
+   in Map.toList contador

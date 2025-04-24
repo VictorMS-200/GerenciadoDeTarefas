@@ -42,6 +42,12 @@ loop tarefas = do
         "5" -> do
             calcularDiasRestantesMain tarefas
             loop tarefas
+        "6" -> do
+            verificarAtrasosMain tarefas
+            loop tarefas
+        "7" -> do
+            filtrarPorTagMain tarefas
+            loop tarefas
         "8" -> do
             salvarEmArquivoMain tarefas
             loop tarefas
