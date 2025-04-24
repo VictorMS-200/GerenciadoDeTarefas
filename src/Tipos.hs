@@ -1,12 +1,14 @@
-module Tipos(Status(..), Prioridade(..), Categoria(..), Tarefa(..)) where
+module Tipos(Status(Pendente, Concluída), Prioridade(Baixa, Media, Alta), Categoria(Trabalho, Estudos, Pessoal, Outro)
+, Tarefa(Tarefa), idTarefa, descricao, status, prioridade, categoria, prazo, tags) where
 
-import Data.Time.Calendar 
 
-data Status = Pendente | Concluída deriving (Show, Eq)
+import Data.Time.Calendar (Day)
 
-data Prioridade = Baixa | Media | Alta deriving (Show, Eq, Ord)
+data Status = Pendente | Concluída deriving (Show, Eq, Read)
 
-data Categoria = Trabalho | Estudos | Pessoal | Outro deriving (Show, Eq)
+data Prioridade = Baixa | Media | Alta deriving (Show, Eq, Ord, Read)
+
+data Categoria = Trabalho | Estudos | Pessoal | Outro deriving (Show, Eq, Read)
 
 -- Registro tarefa
 data Tarefa = Tarefa { 
@@ -17,4 +19,4 @@ idTarefa :: Int
 , categoria :: Categoria
 , prazo :: Maybe Day
 , tags :: [String]
-} deriving (Show, Eq)
+} deriving (Show, Eq, Read)

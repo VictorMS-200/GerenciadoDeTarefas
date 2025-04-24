@@ -1,6 +1,7 @@
 module Main(main) where
 
 import Data.Time.Calendar (Day, fromGregorian)
+
 import System.IO
 import Funcoes
 import Persistencia
@@ -13,6 +14,10 @@ main :: IO ()
 main = do
     hSetBuffering stdout LineBuffering
     hSetEncoding stdout utf8
+    hSetEncoding stdin utf8
+    hSetEncoding stderr utf8
+    putStrLn "Teste de saída UTF-8: Olá, mundo!"
+
 
     putStrLn "Bem-vindo ao gerenciador de tarefas!"
     loop tarefasInicial
@@ -32,17 +37,27 @@ loop tarefas = do
             tarefasAtualizadas <- marcarConcluídaMain tarefas
             loop tarefasAtualizadas
         "4" -> do
-            listarPorCategoriaMain tarefas
+            listarMain tarefas
             loop tarefas
         "5" -> do
-            listarPorPrioridadeMain tarefas
+            calcularDiasRestantesMain tarefas
             loop tarefas
         "6" -> do
-            ordenarPorPrioridadeMain tarefas
-            loop tarefas 
-        "15" -> putStrLn "Saindo do programa..."
+            filtrarPorTagMain tarefas
+            loop tarefas
+        "7" -> do
+            nuvemDeTagsMain tarefas
+            loop tarefas
+        "8" -> do
+            salvarEmArquivoMain tarefas
+            loop tarefas
+        "9" -> do
+            tarefasCarregadas <- carregarDeArquivoMain
+            loop tarefasCarregadas
+        "10" -> do
+            relatorioMain tarefas
+            loop tarefas
+        "11" -> putStrLn "Saindo do programa..."
         _ -> do
             putStrLn "Opção inválida!"
             loop tarefas
-
-    
