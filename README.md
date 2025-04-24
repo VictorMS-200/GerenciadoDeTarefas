@@ -31,7 +31,7 @@ O projeto foi desenvolvido como parte de um trabalho acadêmico da disciplina de
     - [carregarDeArquivo](#carregardearquivo)
     - [filtrarPorTag](#filtrarportag)
 - [Funções de manipulação de tarefas](#funções-de-manipulação-de-tarefas)
-    - [listaMenu](#listamenu)
+    - [menuOpcoesMain](#menuopcoesmain)
     - [listarMenu](#listarmenu)
     - [listarMain](#listarmain)
     - [adicionarTarefaMain](#adicionartarefamain)
@@ -56,13 +56,19 @@ O projeto foi desenvolvido como parte de um trabalho acadêmico da disciplina de
 # Como usar
 Para compilar e executar o projeto, primeiro, você precisa ter o [GHC (Glasgow Haskell Compiler)](https://www.haskell.org/downloads/) instalado.
 
-Após instalar o GHC, você pode clonar o repositório do projeto e navegar até o diretório `src`:
+Após instalar o GHC, você pode clonar o repositório do projeto usando o seguinte comando:
 
-```bash
-cd src
+```bash	
+git clone https://github.com/VictorMS-200/GerenciadoDeTarefas.git
 ```
 
-E então, você pode compilar o projeto com o seguinte comando:
+Navegue até o diretório `src`:
+
+```bash
+cd GerenciadoDeTarefas/src
+```
+
+Então, você pode compilar o projeto com o seguinte comando:
 
 ```bash
 ghc -o gerenciadorDeTarefas .\Main.hs 
@@ -254,7 +260,7 @@ ordenarPorPrioridade :: [Tarefa] -> [Tarefa]
 
 Recebe uma prioridade e uma lista de tarefas, e retorna a lista de tarefas filtradas pela prioridade. Se a prioridade não for encontrada, retorna uma lista vazia.
 
-### observação:
+### Observação:
 - A prioridade é ordenada da seguinte forma: Alta, Média, Baixa. As tarefas com prioridade mais alta aparecem primeiro na lista.
 
 ## filtrarPorStatus
@@ -344,7 +350,7 @@ filtrarPorTag :: String -> [Tarefa] -> [Tarefa]
 - Parâmetros: String -> [Tarefa]
 - Retorna: [Tarefa]
 
-## Funcionalidade:
+### Funcionalidade:
 
 Filtra as tarefas com base na tag informada. Retorna uma lista de tarefas que contém a tag especificada. Se não houver tarefas com a tag, retorna uma lista vazia.
 
@@ -365,13 +371,36 @@ Recebe uma lista de tarefas e retorna uma lista de tuplas com as tags e a quanti
 
 Essas funções são responsáveis por coletar os dados de entrada do usuário e chamar as funções principais para realizar as operações desejadas.
 
-## listaMenu
+## menuOpcoesMain
 ```haskell
 listaMenu :: IO ()
 ```
 - Retorna: IO ()
 
 ### Funcionalidade:
+
+Exibe um menu de opções para o usuário. Essa função é chamada no modulo Main e tem como objetivo apresentar as opções disponíveis para o usuário interagir com o sistema.
+- As opções disponíveis são:
+    * Adicionar tarefa
+    * Remover tarefa
+    * Marcar tarefa como concluída
+    * Listar tarefas
+    * Calcular dias restantes de uma tarefa
+    * Filtrar tarefas por tag
+    * Nuvem de tags
+    * Salvar tarefas em arquivo
+    * Carregar tarefas de arquivo
+    * Relatório de tarefas
+    * Sair
+
+## listarMenu
+```haskell
+listarMenu :: IO ()
+```
+- Retorna: IO ()
+
+### Funcionalidade:
+
 Exibe um menu de opções de como listar as tarefas para o usuário. Essa função é chamada na função [listarMain](#listarmain) quando o usuário escolhe a opção de listar tarefas.
 
 - As opções disponíveis são:
@@ -383,15 +412,17 @@ Exibe um menu de opções de como listar as tarefas para o usuário. Essa funç�
     * Listar tarefas com ordem por prioridade
     * Listar tarefas com prazo atrasado
 
-## listarMenu
+## listarMain
 ```haskell
-listarMenu :: IO ()
+listarMain :: [Tarefa] -> IO ()
 ```
+
+- Parâmetros: [Tarefa]
 - Retorna: IO ()
 
-## Funcionalidade:
+### Funcionalidade:
 
-Exibe o [menu lista](#listaMenu) para o usuário, coleta a opção desejada e chama a função correspondente. Se a opção não for válida, exibe uma mensagem de erro e chama a função novamente.
+Exibe o [menu lista](#listarmenu) para o usuário, coleta a opção desejada e chama a função correspondente. Se a opção não for válida, exibe uma mensagem de erro e chama a função novamente.
 
 ## adicionarTarefaMain
 ```haskell
@@ -501,7 +532,7 @@ filtrarPorStatusMain :: [Tarefa] -> IO ()
 - Parâmetros: [Tarefa]
 - Retorna: IO ()
 
-## Funcionalidade:
+### Funcionalidade:
 Filtra as tarefas de acordo com o status informado pelo usuário. Essa função é chamada quando o usuário escolhe a opção de listar tarefas por status na função [listarMain](#listarmain).
 
 ### Observação:
@@ -553,7 +584,7 @@ Calcula a quantidade de dias restantes para o prazo de uma tarefa. Se o dia da t
 ### Observação:
 - Se o prazo já tiver passado, o sistema irá retornar uma mensagem falando quantos dias já passou do prazo.
 
-### filtrarPorTagMain
+## filtrarPorTagMain
 
 ```haskell
 filtrarPorTagMain :: [Tarefa] -> IO ()
@@ -562,7 +593,7 @@ filtrarPorTagMain :: [Tarefa] -> IO ()
 - Parâmetros: [Tarefa]
 - Retorna: IO ()
 
-## Funcionalidade:
+### Funcionalidade:
 Filtra as tarefas de acordo com a tag informada pelo usuário. 
 
 ## nuvemDeTagsMain
@@ -594,7 +625,7 @@ Salva a lista de tarefas em um arquivo. O usuário deve informar o nome do arqui
 - O arquivo será salvo no mesmo diretório onde o programa está sendo executado.
 - O arquivo tem o nome de "tarefas.txt" e o formato de texto simples.
 
-### carregarDeArquivoMain
+## carregarDeArquivoMain
     
 ```haskell
 carregarDeArquivoMain :: IO [Tarefa]
@@ -628,3 +659,4 @@ Mostra o total de tarefas cadastrados, as tarefas pendentes e concluídas e a po
 - [mapM_](https://stackoverflow.com/questions/27609062/what-is-the-difference-between-mapm-and-mapm-in-haskell)
 - [writeFile](https://hackage.haskell.org/package/base-4.21.0.0/docs/Prelude.html#v:writeFile)
 - [isInfixOf](https://hackage.haskell.org/package/base-4.21.0.0/docs/Data-List.html#v:isInfixOf)
+- [comparing](https://hackage.haskell.org/package/base-4.21.0.0/docs/Data-Ord.html#v:comparing)
