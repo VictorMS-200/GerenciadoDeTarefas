@@ -2,7 +2,7 @@ module Persistencia(listaMenu, adicionarTarefaMain, removerTarefaMain,
 marcarConcluídaMain, listarPorCategoriaMain, listarPorPrioridadeMain, 
 ordenarPorPrioridadeMain, filtrarPorStatusMain, buscarPorPalavraChaveMain, 
 verificarAtrasosMain, calcularDiasRestantesMain, salvarEmArquivoMain,
-carregarDeArquivoMain, relatorioMain, listarMain, filtrarPorTagMain) where
+carregarDeArquivoMain, relatorioMain, listarMain, filtrarPorTagMain, nuvemDeTagsMain) where
     
 import Funcoes
 import Tipos
@@ -331,3 +331,9 @@ filtrarPorTagMain tarefas = do
        if null (filtrarPorTag tagProcurada tarefas) then do putStrLn $ "Nenhuma tarefa com a tag " ++ tagProcurada ++ " encontrada."
        else do
           mostrarTarefas (filtrarPorTag tagProcurada tarefas)
+
+nuvemDeTagsMain :: [Tarefa] -> IO()
+nuvemDeTagsMain tarefas = do
+     let nuvem = nuvemDeTags tarefas
+     if null nuvem then do putStrLn "Nenhuma tag encontrada."
+     else do mapM_ (\(tag, qtd) -> putStrLn $ "- " ++ tag ++ ": " ++ show qtd) nuvem
