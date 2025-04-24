@@ -28,7 +28,7 @@ listaMenu = do
     putStrLn "7. Nuvem de tags"
     putStrLn "8. Salvar em arquivo"
     putStrLn "9. Carregar de arquivo"
-    putStrLn "11. Relatório de tarefas"
+    putStrLn "10. Relatório de tarefas"
     putStrLn "11. Sair"
     putStrLn "========================="
 
