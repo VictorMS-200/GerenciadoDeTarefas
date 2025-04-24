@@ -2,7 +2,7 @@ module Funcoes(adicionarTarefa, removerTarefa, marcarConcluída,
 listarPorCategoria, mostrarTarefas, listarPorPrioridade, 
 ordenarPorPrioridade, filtrarPorStatus, buscarPorPalavraChave, 
 verificarAtrasos, validarIdentificador, calcularDiasRestantes,
-buscarTarefaPorIdentificador ) where
+buscarTarefaPorIdentificador, salvarEmArquivo, carregarDeArquivo) where
 import Tipos
 import Data.List (sortBy)
 import Data.Ord (comparing)
@@ -71,3 +71,12 @@ calcularDiasRestantes :: Tarefa -> Day -> Maybe Int
 calcularDiasRestantes tarefa dia = case prazo tarefa of
     Just prazo -> Just (fromIntegral (diffDays prazo dia))
     Nothing -> Nothing
+
+salvarEmArquivo :: FilePath -> [Tarefa] -> IO ()
+salvarEmArquivo arquivo listaDeTarefas = writeFile arquivo (show listaDeTarefas)
+
+carregarDeArquivo :: FilePath -> IO [Tarefa]
+carregarDeArquivo arquivo = do
+    conteudo <- readFile arquivo
+    let tarefas = read conteudo :: [Tarefa]
+    return tarefas

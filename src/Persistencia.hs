@@ -1,7 +1,8 @@
 module Persistencia(listaMenu, adicionarTarefaMain, removerTarefaMain,
 marcarConcluídaMain, listarPorCategoriaMain, listarPorPrioridadeMain, 
 ordenarPorPrioridadeMain, filtrarPorStatusMain, buscarPorPalavraChaveMain, 
-verificarAtrasosMain, calcularDiasRestantesMain) where
+verificarAtrasosMain, calcularDiasRestantesMain, salvarEmArquivoMain,
+carregarDeArquivoMain) where
 import Funcoes
 import Tipos
 import System.IO
@@ -236,7 +237,17 @@ calcularDiasRestantesMain tarefas = do
                 Just tarefaEncontrada -> do
                     let diasRestantes = calcularDiasRestantes tarefaEncontrada day
                     case diasRestantes of
-                        Just dias -> if dias > 0 then putStrLn $ "Dias restantes: " ++ show dias else putStrLn $ "Passou do prazo! Tem " ++ show (abs dias) ++ " que já passou do prazo da tarefa."
+                        Just dias -> if dias > 0 then putStrLn $ "Dias restantes: " ++ show dias else putStrLn $ "Passou do prazo! Tem " ++ show (abs dias) ++" que já passou do prazo da tarefa."
                         Nothing -> putStrLn "A tarefa não possui prazo definido."
 
+salvarEmArquivoMain :: [Tarefa] -> IO()
+salvarEmArquivoMain tarefas = do
+    putStrLn "Salvando listas no arquivo 'tarefas.txt'"
+    salvarEmArquivo "tarefas.txt" tarefas
 
+carregarDeArquivoMain :: IO [Tarefa]
+carregarDeArquivoMain = do
+    putStrLn "Carregando tarefas do arquivo 'tarefas.txt'"
+    tarefas <- carregarDeArquivo "tarefas.txt"
+    putStrLn "Tarefas carregadas com sucesso!"
+    return tarefas

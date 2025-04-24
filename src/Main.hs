@@ -57,7 +57,12 @@ loop tarefas = do
         "10" -> do
             calcularDiasRestantesMain tarefas
             loop tarefas
-        
+        "13" -> do
+            salvarEmArquivoMain tarefas
+            loop tarefas
+        "14" -> do
+            tarefasCarregadas <- carregarDeArquivoMain
+            loop tarefasCarregadas
         "15" -> putStrLn "Saindo do programa..."
         _ -> do
             putStrLn "Opção inválida!"
